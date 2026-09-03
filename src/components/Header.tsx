@@ -15,6 +15,13 @@ export function Header() {
           Projetos
         </Link>
         <ThemeToggle />
+          <Link href="/sobre" className="text-sm text-foreground/70 hover:text-foreground">
+    Sobre
+  </Link>
+  <Link href="/contato" className="text-sm text-foreground/70 hover:text-foreground">
+    Contato
+  </Link>
+
       </nav>
     </header>
   );
