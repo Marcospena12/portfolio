@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: oklch(86.9% 0.022 252.894);
+  --background: #fffbeb;
   --foreground: #171717;
 }
 
@@ -34,13 +34,19 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  opacity: 0.50;
   pointer-events: none;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  overflow: hidden;
+  mix-blend-mode: multiply;
+  opacity: 0.15;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 30% 0%, rgba(196, 145, 60, 0.6), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(180, 130, 50, 0.5), transparent 60%);
 }
 
 .dark body::before {
   mix-blend-mode: screen;
-  opacity: 0.20;
+  opacity: 0.3;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 30% 0%, rgba(140, 170, 200, 0.5), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(100, 140, 180, 0.4), transparent 60%);
 }

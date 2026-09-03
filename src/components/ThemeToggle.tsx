@@ -8,22 +8,31 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Necessário para evitar mismatch de hydration: o tema só é conhecido no navegador.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return <div className="h-9 w-9" />;
+    return <div className="h-9 w-16" />;
   }
+
+  const isDark = theme === "dark";
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-lg dark:border-gray-700"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Alternar tema"
+      className={`relative flex h-9 w-16 items-center rounded-full border border-foreground/10 p-1 transition-colors duration-300 ${
+        isDark ? "bg-foreground/10" : "bg-amber-100"
+      }`}
     >
-      {theme === "dark" ? "☀️" : "🌙"}
+      <span
+        className={`flex h-7 w-7 items-center justify-center rounded-full bg-background text-sm shadow-md transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          isDark ? "translate-x-0" : "translate-x-7"
+        }`}
+      >
+        {isDark ? "🌙" : "☀️"}
+      </span>
     </button>
   );
 }
