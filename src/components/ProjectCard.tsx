@@ -5,17 +5,20 @@ import type { Project } from "@/data/projects";
 import { technologies } from "@/data/technologies";
 import * as SiIcons from "react-icons/si";
 import type { IconType } from "react-icons";
+import type { CSSProperties } from "react";
 
 export function ProjectCard({ project }: { project: Project }) {
   const router = useRouter();
   const projectTechs = technologies.filter((tech) =>
     project.techIds.includes(tech.id)
   );
+  const glowColor = projectTechs[0]?.color ?? "#888888";
 
   return (
     <div
       onClick={() => router.push(`/projetos/${project.id}`)}
-      className="relative flex cursor-pointer flex-col rounded-xl border border-foreground/10 p-6 transition-colors hover:border-foreground/30"
+      style={{ "--glow": glowColor } as CSSProperties}
+      className="relative flex cursor-pointer flex-col rounded-xl border border-foreground/10 bg-foreground/[0.02] p-6 backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1.5 hover:border-[var(--glow)] hover:shadow-[0_16px_32px_-12px_var(--glow)]"
     >
       <div className="absolute top-4 right-4 flex gap-2">
         {projectTechs.map((tech) => {
@@ -33,7 +36,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <p className="mb-4 text-sm text-foreground/70">{project.description}</p>
 
       {project.link && (
-         <a
+        <a
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"

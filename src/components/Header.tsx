@@ -18,7 +18,7 @@ export function Header() {
           Tecnologias
         </MagneticLink>
         <MagneticLink href="/projetos" isActive={pathname.startsWith("/projetos")}>
-          Projetos
+          Projetos 
         </MagneticLink>
         <MagneticLink href="/sobre" isActive={pathname === "/sobre"}>
           Sobre

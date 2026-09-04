@@ -1,5 +1,6 @@
 import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/ProjectCard";
+import { PageHeading } from "@/components/PageHeading";
 
 type PageProps = {
   searchParams: Promise<{ tech?: string }>;
@@ -14,9 +15,9 @@ export default async function ProjetosPage({ searchParams }: PageProps) {
 
   return (
     <main className="min-h-screen bg-background px-6 pt-32 pb-20 text-foreground">
-      <h1 className="mb-2 text-4xl font-bold">Projetos</h1>
+      <PageHeading eyebrow="Portfólio" title="Projetos" />
       {tech && (
-        <p className="mb-10 text-sm text-foreground/60">
+        <p className="-mt-8 mb-10 text-center text-sm text-foreground/60">
           Filtrando por: <span className="font-medium">{tech}</span>
         </p>
       )}

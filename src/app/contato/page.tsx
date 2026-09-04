@@ -4,18 +4,19 @@ import { contactLinks } from "@/data/contact";
 import * as FaIcons from "react-icons/fa";
 import * as SiIcons from "react-icons/si";
 import type { IconType } from "react-icons";
+import { PageHeading } from "@/components/PageHeading";
 
 const allIcons = { ...FaIcons, ...SiIcons };
 
 export default function ContatoPage() {
   return (
     <main className="min-h-screen bg-background px-6 pt-32 pb-20 text-foreground">
-      <h1 className="mb-10 text-4xl font-bold">Contato</h1>
-      <div className="flex max-w-md flex-col gap-3">
+      <PageHeading eyebrow="Me chama aê" title="Contato" />
+      <div className="mx-auto flex max-w-md flex-col gap-3">
         {contactLinks.map((link) => {
           const Icon = allIcons[link.icon as keyof typeof allIcons] as IconType;
-          return ( <a
-            
+          return (
+            <a
               key={link.id}
               href={link.href}
               target="_blank"
