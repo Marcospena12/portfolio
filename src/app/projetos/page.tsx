@@ -15,7 +15,7 @@ export default async function ProjetosPage({ searchParams }: PageProps) {
 
   return (
     <main className="min-h-screen bg-background px-6 pt-32 pb-20 text-foreground">
-      <PageHeading eyebrow="Portfólio" title="Projetos" />
+      <PageHeading pageKey="projetos" />
       {tech && (
         <p className="-mt-8 mb-10 text-center text-sm text-foreground/60">
           Filtrando por: <span className="font-medium">{tech}</span>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { Header } from "@/components/Header";
 
 export const metadata: Metadata = {
@@ -17,8 +18,10 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          <Header />
-          {children}
+          <LanguageProvider>
+            <Header />
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

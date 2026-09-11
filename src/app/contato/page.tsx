@@ -11,7 +11,7 @@ const allIcons = { ...FaIcons, ...SiIcons };
 export default function ContatoPage() {
   return (
     <main className="min-h-screen bg-background px-6 pt-32 pb-20 text-foreground">
-      <PageHeading eyebrow="Me chama aê" title="Contato" />
+      <PageHeading pageKey="contato" />
       <div className="mx-auto flex max-w-md flex-col gap-3">
         {contactLinks.map((link) => {
           const Icon = allIcons[link.icon as keyof typeof allIcons] as IconType;

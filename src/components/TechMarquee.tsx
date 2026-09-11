@@ -1,16 +1,23 @@
 "use client";
 
+"use client";
+
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { technologies } from "@/data/technologies";
 import * as SiIcons from "react-icons/si";
+import * as FaIcons from "react-icons/fa";
 import type { IconType } from "react-icons";
+import { useLanguage } from "@/components/LanguageProvider";
+import { ScrambleText } from "@/components/ScrambleText";
+
+const allIcons = { ...SiIcons, ...FaIcons };
 
 function TechItem({ tech }: { tech: (typeof technologies)[number] }) {
-  const Icon = SiIcons[tech.icon as keyof typeof SiIcons] as IconType;
+  const Icon = allIcons[tech.icon as keyof typeof allIcons] as IconType;
   return (
-    <div className="flex items-center gap-3 whitespace-nowrap text-xl font-medium text-foreground/70">
-      <Icon style={{ color: tech.color }} className="text-6xl" />
+    <div className="flex items-center gap-2 whitespace-nowrap text-base font-medium text-foreground/70">
+      <Icon style={{ color: tech.color }} className="text-3xl" />
       {tech.name}
     </div>
   );
@@ -19,6 +26,7 @@ function TechItem({ tech }: { tech: (typeof technologies)[number] }) {
 const PIXELS_PER_SECOND = 60;
 
 export function TechMarquee() {
+  const { t } = useLanguage();
   const containerRef = useRef<HTMLAnchorElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const [repeats, setRepeats] = useState(2);
@@ -49,29 +57,35 @@ export function TechMarquee() {
   const items = [...oneSet, ...oneSet];
 
   return (
-    <Link
-      href="/tecnologias"
-      ref={containerRef}
-      className="group relative block cursor-pointer overflow-hidden border-b border-foreground/10 py-10"
-    >
-      <div
-        ref={measureRef}
-        className="pointer-events-none absolute top-0 left-0 flex -translate-y-full gap-16 opacity-0"
-        aria-hidden="true"
-      >
-        {technologies.map((tech) => (
-          <TechItem key={tech.id} tech={tech} />
-        ))}
-      </div>
+    <div>
+      <p className="pb-4 text-center text-xs tracking-[0.2em] text-foreground/50 uppercase">
+      <ScrambleText text={t.marquee.label} />
+     </p>
 
-      <div
-        style={{ animationDuration: `${duration}s` }}
-        className="flex w-max animate-[scroll-marquee_linear_infinite] gap-16 group-hover:[animation-play-state:paused]"
+      <Link
+        href="/tecnologias"
+        ref={containerRef}
+        className="group relative block cursor-pointer overflow-hidden border-b border-foreground/10 py-10"
       >
-        {items.map((tech, i) => (
-          <TechItem key={`${tech.id}-${i}`} tech={tech} />
-        ))}
-      </div>
-    </Link>
+        <div
+          ref={measureRef}
+          className="pointer-events-none absolute top-0 left-0 flex -translate-y-full gap-16 opacity-0"
+          aria-hidden="true"
+        >
+          {technologies.map((tech) => (
+            <TechItem key={tech.id} tech={tech} />
+          ))}
+        </div>
+
+        <div
+          style={{ animationDuration: `${duration}s` }}
+          className="flex w-max animate-[scroll-marquee_linear_infinite] gap-16 group-hover:[animation-play-state:paused]"
+        >
+          {items.map((tech, i) => (
+            <TechItem key={`${tech.id}-${i}`} tech={tech} />
+          ))}
+        </div>
+      </Link>
+    </div>
   );
 }

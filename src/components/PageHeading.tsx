@@ -1,9 +1,16 @@
+"use client";
+
+import { useLanguage } from "@/components/LanguageProvider";
+import { translations } from "@/data/translations";
+
 type PageHeadingProps = {
-  eyebrow: string;
-  title: string;
+  pageKey: keyof typeof translations.pt.pages;
 };
 
-export function PageHeading({ eyebrow, title }: PageHeadingProps) {
+export function PageHeading({ pageKey }: PageHeadingProps) {
+  const { t } = useLanguage();
+  const { eyebrow, title } = t.pages[pageKey];
+
   return (
     <div className="flex flex-col items-center gap-3 pb-12 text-center">
       <span className="text-xs font-semibold tracking-[0.2em] text-foreground uppercase opacity-70">
