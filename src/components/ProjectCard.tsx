@@ -4,8 +4,11 @@ import { useRouter } from "next/navigation";
 import type { Project } from "@/data/projects";
 import { technologies } from "@/data/technologies";
 import * as SiIcons from "react-icons/si";
+import * as FaIcons from "react-icons/fa";
 import type { IconType } from "react-icons";
 import type { CSSProperties } from "react";
+
+const allIcons = { ...SiIcons, ...FaIcons };
 
 export function ProjectCard({ project }: { project: Project }) {
   const router = useRouter();
@@ -22,7 +25,7 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       <div className="absolute top-4 right-4 flex gap-2">
         {projectTechs.map((tech) => {
-          const Icon = SiIcons[tech.icon as keyof typeof SiIcons] as IconType;
+          const Icon = allIcons[tech.icon as keyof typeof allIcons] as IconType;
           return (
             <Icon key={tech.id} style={{ color: tech.color }} className="text-lg" />
           );
@@ -36,7 +39,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <p className="mb-4 text-sm text-foreground/70">{project.description}</p>
 
       {project.link && (
-        <a
+         <a
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"

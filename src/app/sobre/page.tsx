@@ -7,7 +7,7 @@ export default function SobrePage() {
   const { t } = useLanguage();
 
   return (
-    <main className="min-h-screen bg-background px-6 pt-32 pb-20 text-foreground">
+    <main className="min-h-screen bg-background px-6 pt-16 pb-20 text-foreground">
       <PageHeading pageKey="sobre" />
       <div className="mx-auto max-w-2xl space-y-4 text-foreground/80">
         {t.sobre.paragraphs.map((paragraph, i) => (

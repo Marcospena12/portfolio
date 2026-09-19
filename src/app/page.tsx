@@ -3,7 +3,7 @@ import { TechMarquee } from "@/components/TechMarquee";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex flex-1 flex-col">
       <Hero />
       <TechMarquee />
     </main>

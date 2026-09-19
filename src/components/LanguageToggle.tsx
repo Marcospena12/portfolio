@@ -3,8 +3,12 @@
 import { useLanguage } from "@/components/LanguageProvider";
 import { ScrambleText } from "@/components/ScrambleText";
 
+
+
 export function LanguageToggle() {
   const { locale, setLocale } = useLanguage();
+
+  
 
   return (
     <button

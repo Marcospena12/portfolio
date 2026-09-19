@@ -1,3 +1,11 @@
+export type ProjectDetails = {
+  architecture: string;
+  stack: string[];
+  agentCategories: { label: string; items: string[] }[];
+  differentials: string[];
+  metrics: { label: string; value: string }[];
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -5,9 +13,73 @@ export type Project = {
   techIds: string[];
   type: "trabalho" | "pessoal";
   link?: string;
+  details?: ProjectDetails;
 };
 
 export const projects: Project[] = [
+  {
+    id: "luiza",
+    title: "Luiza - Super Agente de IA para suporte",
+    description:
+      "Sistema multiagente hierárquico construído no n8n para automatizar o suporte via Crisp, roteando cada conversa ao especialista certo. Resolve 70% das ~700 conversas mensais de forma totalmente autônoma e HUMANIZADA.",
+    techIds: ["n8n", "postgresql", "redis", "slack", "metabase"],
+    type: "trabalho",
+    details: {
+      architecture:
+        "A Luiza é um sistema multiagente hierárquico: um agente orquestrador central classifica cada mensagem e a roteia para o especialista certo, ao invés de um único agente genérico tentando resolver tudo. Essa separação de responsabilidades reduz alucinação e permite prompts de sistema extremamente detalhados por domínio.",
+      stack: [
+        "Orquestração: n8n (nodes LangChain), agentes do tipo agentTool",
+        "LLM principal: GPT-5.4 via OpenRouter, com fallback em GPT-5.4-nano",
+        "Memória: PostgreSQL (Supabase), histórico das últimas 10 mensagens",
+        "RAG: 2 vector stores em PGVector (base institucional + base de ajuda técnica)",
+        "Cache/estado: Redis (Dragonfly) para flags de follow-up",
+        "Canal: Crisp Chat via HTTP requests autenticados",
+        "Integração interna: Slack para alertas aos times comercial/financeiro",
+        "Output: parser JSON garantindo resposta sempre estruturada",
+      ],
+      agentCategories: [
+        {
+          label: "Suporte técnico",
+          items: [
+            "Suporte WhatsApp QR Code",
+            "Suporte WABA (WhatsApp Oficial)",
+            "Base de conhecimento geral",
+            "Especialista em integrações",
+          ],
+        },
+        {
+          label: "Comercial",
+          items: ["Roteamento comercial e financeiro", "Gestão de cancelamentos"],
+        },
+        {
+          label: "Atendimento humano",
+          items: ["Handoff humano", "Encerramento de conversa"],
+        },
+        {
+          label: "Memória e contexto",
+          items: [
+            "Recuperação de contexto histórico",
+            "Coleta de sugestões de melhoria",
+          ],
+        },
+      ],
+      differentials: [
+        "Anti-alucinação por design — preços, links e prazos sempre vêm de fontes verificadas, nunca inventados",
+        "Consciência temporal — cálculo de horário comercial em tempo real",
+        "Fallback de modelo garantindo disponibilidade",
+        "Notificações proativas ao time via Slack com resumos gerados por IA",
+        "Memória persistente entre sessões",
+        "Ciclo de melhoria contínua — análise pós-conversa de handoffs humanos para ajustar prompts",
+        "6 dashboards no Metabase acompanhando resolução diária, semanal e mensal",
+      ],
+      metrics: [
+        { label: "Resolução autônoma", value: "70%" },
+        { label: "Conversas/mês", value: "~700" },
+        { label: "Subagentes", value: "10" },
+        { label: "Dashboards", value: "6" },
+      ],
+    },
+  },
   {
     id: "automacao-relatorios",
     title: "Automação de relatórios",
