@@ -51,7 +51,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           )}
           {details.visual?.kind === "tilt-logo" && (
   <div className="mx-auto max-w-3xl py-16">
-    <TiltLogo src={details.visual.src} alt={details.visual.alt} />
+    <TiltLogo
+      src={details.visual.src}
+      alt={details.visual.alt}
+      href="https://n8n.io/integrations/ni/"
+    />
   </div>
 )}
 

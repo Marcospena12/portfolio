@@ -132,9 +132,9 @@ export const projects: Project[] = [
 
   {
   id: "ni-node",
-  title: "Nó verificado do n8n para Notificações Inteligentes",
+  title: "Nó Verificado no N8N - Notificações Inteligentes",
   description:
-    "Nó oficialmente verificado pelo n8n que transforma a API da Notificações Inteligentes em blocos visuais nativos — permitindo criar, editar, buscar e gerenciar leads e integrações sem escrever código.",
+    "Nó oficialmente verificado pelo n8n que transforma a API da Notificações Inteligentes em blocos visuais nativos, permitindo criar, editar, buscar e gerenciar leads e integrações sem escrever código.",
   techIds: ["n8n", "typescript"],
   type: "trabalho",
   link: "https://github.com/GPMP/n8n-node-notificacoes-inteligentes/blob/main/README.md",
