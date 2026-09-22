@@ -11,7 +11,8 @@ export type ProjectDetails = {
 
 export type ProjectVisual =
   | { kind: "agent-map"; nodes: FloatingNode[] }   // o diagrama da Luiza
-  | { kind: "image"; src: string; alt: string };    // uma imagem do projeto
+  | { kind: "image"; src: string; alt: string }   // uma imagem do projeto
+  | { kind: "tilt-logo"; src: string; alt: string };
 
 
 export type Project = {
@@ -128,4 +129,71 @@ export const projects: Project[] = [
     techIds: ["docker"],
     type: "trabalho",
   },
+
+  {
+  id: "ni-node",
+  title: "Nó verificado do n8n para Notificações Inteligentes",
+  description:
+    "Nó oficialmente verificado pelo n8n que transforma a API da Notificações Inteligentes em blocos visuais nativos — permitindo criar, editar, buscar e gerenciar leads e integrações sem escrever código.",
+  techIds: ["n8n", "typescript"],
+  type: "trabalho",
+  link: "https://github.com/GPMP/n8n-node-notificacoes-inteligentes/blob/main/README.md",
+  details: {
+    architecture:
+      "O nó expõe dois recursos principais — Integrações e Leads — seguindo convenções CRUD (Criar, Ler, Atualizar, Deletar) construídas em torno de identificadores únicos. O fluxo típico de uso é: buscar/listar para descobrir o ID de um item, e então usar esse ID numa operação seguinte (editar, marcar com tag, deletar). Toda operação retorna confirmações estruturadas de sucesso ou erros detalhados (código HTTP + mensagem legível), permitindo construir lógica condicional robusta dentro do fluxo. A autenticação usa um Bearer Token gerado por organização no painel da NI, permitindo múltiplas credenciais para múltiplos negócios.",
+    stack: [
+      "Linguagem: TypeScript (exigência do SDK de nós do n8n)",
+      "Zero dependências de runtime — requisito obrigatório para verificação",
+      "Passou pelo linter automatizado oficial (@n8n/scan-community-package)",
+      "Revisão manual pela equipe do n8n, com ajustes iterativos solicitados",
+      "Documentação em inglês (exigência do programa de verificação)",
+      "Autenticação via Bearer Token, com escopo por organização",
+    ],
+    agentCategories: [
+      {
+        label: "Integrações",
+        items: [
+          "Criar nova integração",
+          "Listar todas as integrações",
+          "Buscar integração",
+          "Editar nome da integração",
+          "Deletar integração",
+        ],
+      },
+      {
+        label: "Leads",
+        items: [
+          "Criar lead",
+          "Atualizar lead",
+          "Criar ou atualizar lead (deduplicando por telefone)",
+          "Adicionar tags",
+          "Atualizar tags",
+          "Remover tags",
+          "Buscar todos os leads",
+          "Buscar lead por ID",
+          "Deletar lead",
+        ],
+      },
+    ],
+    differentials: [
+      "Selo \"Verified\" oficial do n8n — aparece na busca nativa do app e tem página própria na Biblioteca de Integrações",
+      "Ideia nascida de demanda real: usuários da própria Notificações Inteligentes solicitaram essa integração",
+      "Operação inteligente \"Criar ou Atualizar Lead\" que deduplica automaticamente por número de telefone",
+      "Design orientado a ID permite encadear operações complexas dentro do mesmo fluxo",
+      "Zero dependências de runtime — exigiu otimizar a implementação usando só os helpers HTTP nativos do n8n",
+    ],
+    metrics: [
+      { label: "Status", value: "Verified" },
+      { label: "Recursos", value: "2" },
+      { label: "Operações", value: "14" },
+      { label: "Dependências", value: "0" },
+    ],
+    visual: {
+  kind: "tilt-logo",
+  src: "/logos/ni-node-logo.svg",
+  alt: "Logo do nó Notificações Inteligentes",
+},
+    
+  },
+},
 ];

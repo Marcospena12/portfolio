@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AgentMap } from "@/components/AgentMap";
 import { MetricCard } from "@/components/MetricCard";
 import { ScrollHint } from "@/components/ScrollHint";
+import { TiltLogo } from "@/components/TiltLogo";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -48,6 +49,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               className="mx-auto w-full max-w-4xl rounded-2xl border border-foreground/10"
             />
           )}
+          {details.visual?.kind === "tilt-logo" && (
+  <div className="mx-auto max-w-3xl py-16">
+    <TiltLogo src={details.visual.src} alt={details.visual.alt} />
+  </div>
+)}
 
           <div className="mx-auto max-w-3xl space-y-20 pt-20">
             <section id="arquitetura">
