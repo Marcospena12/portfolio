@@ -1,10 +1,18 @@
+import type { FloatingNode } from "@/components/AgentMap";
+
 export type ProjectDetails = {
   architecture: string;
   stack: string[];
   agentCategories: { label: string; items: string[] }[];
   differentials: string[];
   metrics: { label: string; value: string }[];
+   visual?: ProjectVisual;
 };
+
+export type ProjectVisual =
+  | { kind: "agent-map"; nodes: FloatingNode[] }   // o diagrama da Luiza
+  | { kind: "image"; src: string; alt: string };    // uma imagem do projeto
+
 
 export type Project = {
   id: string;
@@ -78,8 +86,23 @@ export const projects: Project[] = [
         { label: "Subagentes", value: "10" },
         { label: "Dashboards", value: "6" },
       ],
+       visual: {
+        kind: "agent-map",
+        nodes: [
+          { id: "feature", label: "Agent - Sugestões de Melhorias", color: "#3b82f6", top: "15%", left: "60%" },
+          { id: "triage", label: "Agent - Trata Assuntos de Negócios", color: "#f59e0b", top: "28%", left: "79%" },
+          { id: "primary-ch", label: "Agent - Especialista em WhatsApp Official", color: "#10b981", top: "50%", left: "85%" },
+          { id: "legacy-ch", label: "Agent - Especialista em WhatsApp QRCode", color: "#34d399", top: "70%", left: "85%" },
+          { id: "escalation", label: "Agent - Especialista em Human Handoff", color: "#f43f5e", top: "84%", left: "56%" },
+          { id: "wrapup", label: "Agent - Finalizador de Conversas", color: "#64748b", top: "84%", left: "30%" },
+          { id: "context", label: "Agent - Busca Contextos de Conversas antigas", color: "#8b5cf6", top: "60%", left: "20%" },
+          { id: "billing", label: "Agent - Especialista em Assinaturas", color: "#ec4899", top: "32%", left: "24%" },
+          { id: "ecosystem", label: "Agent - Especialista em Integrações", color: "#d946ef", top: "16%", left: "34%" },
+        ],
+      },
     },
   },
+  
   {
     id: "automacao-relatorios",
     title: "Automação de relatórios",
