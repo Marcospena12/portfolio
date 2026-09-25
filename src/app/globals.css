@@ -192,7 +192,23 @@ body::before {
   }
 }
 
+.orbit-spin {
+  animation: orbit-spin var(--orbit-duration, 18s) linear infinite;
+}
+.orbit-counter {
+  animation: orbit-counter var(--orbit-duration, 18s) linear infinite;
+}
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes orbit-counter {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .orbit-spin, .orbit-counter { animation: none !important; }
   .aurora-blob {
     animation: none !important;
   }

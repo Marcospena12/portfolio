@@ -14,7 +14,7 @@ export default async function ProjetosPage({ searchParams }: PageProps) {
     : projects;
 
   return (
-    <main className="min-h-screen bg-background px-6 pt-16 pb-20 text-foreground">
+    <main className="flex-1 px-6 pt-16 pb-20 text-foreground">
       <PageHeading pageKey="projetos" />
       {tech && (
         <p className="-mt-8 mb-10 text-center text-sm text-foreground/60">

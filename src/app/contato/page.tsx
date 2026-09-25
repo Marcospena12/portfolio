@@ -10,7 +10,7 @@ const allIcons = { ...FaIcons, ...SiIcons };
 
 export default function ContatoPage() {
   return (
-    <main className="min-h-screen bg-background px-6 pt-16 pb-20 text-foreground">
+    <main className="flex-1 px-6 pt-16 pb-20 text-foreground">
       <PageHeading pageKey="contato" />
       <div className="mx-auto flex max-w-md flex-col gap-3">
         {contactLinks.map((link) => {

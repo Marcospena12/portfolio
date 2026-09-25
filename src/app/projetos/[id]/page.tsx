@@ -7,6 +7,7 @@ import { TiltLogo } from "@/components/TiltLogo";
 import { GlowLogo } from "@/components/GlowLogo";
 import { ClockLamp } from "@/components/ClockLamp";
 import { QuotaMeter } from "@/components/QuotaMeter";
+import { OrbitLogos } from "@/components/OrbitLogos";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -23,7 +24,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const { details } = project;
 
   return (
-    <main className="min-h-screen bg-background px-6 pt-16 pb-20 text-foreground">
+    <main className="flex-1 px-6 pt-16 pb-20 text-foreground">
       {details && <ScrollHint />}
 
       <div className="mx-auto max-w-3xl">
@@ -64,17 +65,28 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </div>
           )}
 
+          {details.visual?.kind === "orbit-logos" && (
+            <div className="mx-auto max-w-3xl py-16">
+              <OrbitLogos
+                logos={details.visual.logos}
+                radius={details.visual.radius}
+                size={details.visual.size}
+                duration={details.visual.duration}
+              />
+            </div>
+          )}
+
           {details.visual?.kind === "quota-meter" && (
-  <div className="mx-auto max-w-3xl py-16">
-    <QuotaMeter rooms={details.visual.rooms} />
-  </div>
-)}
+            <div className="mx-auto max-w-3xl py-16">
+              <QuotaMeter rooms={details.visual.rooms} />
+            </div>
+          )}
 
           {details.visual?.kind === "clock-lamp" && (
-  <div className="mx-auto max-w-3xl py-16">
-    <ClockLamp schedule={details.visual.schedule} />
-  </div>
-)}
+            <div className="mx-auto max-w-3xl py-16">
+              <ClockLamp schedule={details.visual.schedule} />
+            </div>
+          )}
 
           {details.visual?.kind === "glow-logos" && (
             <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-20 py-16">

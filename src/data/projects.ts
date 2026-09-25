@@ -6,7 +6,8 @@ export type ProjectVisual =
   | { kind: "tilt-logo"; src: string; alt: string; href?: string }
   | { kind: "glow-logos"; logos: { src: string; alt: string }[] }
   | { kind: "clock-lamp"; schedule: { on: string; off: string } }
-  | { kind: "quota-meter"; rooms: { label: string; used: number; quota: number }[] };
+  | { kind: "quota-meter"; rooms: { label: string; used: number; quota: number }[] }
+  | { kind: "orbit-logos"; logos: { src: string; alt: string }[]; radius?: number; size?: number; duration?: number };
 export type ProjectDetails = {
   architecture: string;
   stack: string[];
@@ -479,13 +480,16 @@ export const projects: Project[] = [
         { label: "Páginas", value: "6" },
       ],
       visual: {
-        kind: "glow-logos",
+        kind: "orbit-logos",
         logos: [
           { src: "/logos/next-logo.svg", alt: "Logo do Next.js" },
           { src: "/logos/react-logo.svg", alt: "Logo do React" },
           { src: "/logos/typescript-logo.svg", alt: "Logo do TypeScript" },
           { src: "/logos/tailwind-logo.svg", alt: "Logo do Tailwind CSS" },
         ],
+        radius: 130,
+        size: 90,
+        duration: 18,
       },
     },
   },
