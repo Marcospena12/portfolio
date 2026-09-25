@@ -168,4 +168,32 @@ export const technologies: Technology[] = [
   icon: "SiOllama",
   color: "#000000", 
 },
+{
+  id: "mqtt",
+  name: "MQTT",
+  summary: "Protocolo de mensageria leve para dispositivos IoT.",
+  icon: "SiMqtt",
+  color: "#660066",
+},
+{
+  id: "cloudflare",
+  name: "Cloudflare",
+  summary: "Rede de borda e segurança, com tunnel para expor serviços internos.",
+  icon: "SiCloudflare",
+  color: "#F38020",
+},
+{
+  id: "nextjs",
+  name: "Next.js",
+  summary: "Framework React para aplicações web com renderização no servidor.",
+  icon: "SiNextdotjs",
+  color: "#9CA3AF",
+},
+{
+  id: "tailwindcss",
+  name: "Tailwind CSS",
+  summary: "Framework de estilos utilitário para interfaces consistentes.",
+  icon: "SiTailwindcss",
+  color: "#06B6D4",
+}
 ];

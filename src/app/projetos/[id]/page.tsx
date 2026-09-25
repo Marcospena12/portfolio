@@ -4,6 +4,9 @@ import { AgentMap } from "@/components/AgentMap";
 import { MetricCard } from "@/components/MetricCard";
 import { ScrollHint } from "@/components/ScrollHint";
 import { TiltLogo } from "@/components/TiltLogo";
+import { GlowLogo } from "@/components/GlowLogo";
+import { ClockLamp } from "@/components/ClockLamp";
+import { QuotaMeter } from "@/components/QuotaMeter";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -22,8 +25,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   return (
     <main className="min-h-screen bg-background px-6 pt-16 pb-20 text-foreground">
       {details && <ScrollHint />}
+
       <div className="mx-auto max-w-3xl">
-       <h1 className="gradient-text mb-4 text-4xl font-bold">{project.title}</h1>
+        <h1 className="gradient-text mb-4 text-4xl font-bold">{project.title}</h1>
         <p className="mb-10 text-foreground/70">{project.description}</p>
 
         {details && (
@@ -49,15 +53,36 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               className="mx-auto w-full max-w-4xl rounded-2xl border border-foreground/10"
             />
           )}
+
           {details.visual?.kind === "tilt-logo" && (
+            <div className="mx-auto max-w-3xl py-16">
+              <TiltLogo
+                src={details.visual.src}
+                alt={details.visual.alt}
+                href={details.visual.href}
+              />
+            </div>
+          )}
+
+          {details.visual?.kind === "quota-meter" && (
   <div className="mx-auto max-w-3xl py-16">
-    <TiltLogo
-      src={details.visual.src}
-      alt={details.visual.alt}
-      href="https://n8n.io/integrations/ni/"
-    />
+    <QuotaMeter rooms={details.visual.rooms} />
   </div>
 )}
+
+          {details.visual?.kind === "clock-lamp" && (
+  <div className="mx-auto max-w-3xl py-16">
+    <ClockLamp schedule={details.visual.schedule} />
+  </div>
+)}
+
+          {details.visual?.kind === "glow-logos" && (
+            <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-20 py-16">
+              {details.visual.logos.map((logo) => (
+                <GlowLogo key={logo.src} src={logo.src} alt={logo.alt} size={320} />
+              ))}
+            </div>
+          )}
 
           <div className="mx-auto max-w-3xl space-y-20 pt-20">
             <section id="arquitetura">
@@ -76,23 +101,27 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </ul>
             </section>
 
-            <section id="subagentes">
-              <h2 className="mb-6 text-2xl font-semibold">Subagentes especializados</h2>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                {details.agentCategories.map((cat) => (
-                  <div key={cat.label} className="rounded-xl border border-foreground/10 p-5">
-                    <h3 className="mb-3 font-semibold">{cat.label}</h3>
-                    <ul className="space-y-1">
-                      {cat.items.map((item, i) => (
-                        <li key={i} className="text-sm text-foreground/70">
-                          • {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {details.agentCategories && (
+              <section id="subagentes">
+                <h2 className="mb-6 text-2xl font-semibold">
+                  {details.categoriesTitle ?? "Subagentes especializados"}
+                </h2>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  {details.agentCategories.map((cat) => (
+                    <div key={cat.label} className="rounded-xl border border-foreground/10 p-5">
+                      <h3 className="mb-3 font-semibold">{cat.label}</h3>
+                      <ul className="space-y-1">
+                        {cat.items.map((item, i) => (
+                          <li key={i} className="text-sm text-foreground/70">
+                            • {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <section id="diferenciais">
               <h2 className="mb-4 text-2xl font-semibold">Diferenciais</h2>
