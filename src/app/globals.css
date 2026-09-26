@@ -207,8 +207,33 @@ body::before {
   to { transform: rotate(-360deg); }
 }
 
+.flow-dot {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  height: 5px;
+  width: 5px;
+  border-radius: 9999px;
+  animation: flow-travel 2.2s linear infinite;
+}
+@keyframes flow-travel {
+  0%   { left: 0%;   opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+.flow-buzz {
+  animation: flow-buzz 2.2s ease-in-out infinite;
+}
+@keyframes flow-buzz {
+  0%, 100% { transform: translateY(0);   opacity: 0.5; }
+  50%      { transform: translateY(3px); opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin, .orbit-counter { animation: none !important; }
+  .flow-dot, .flow-buzz { animation: none !important; }
   .aurora-blob {
     animation: none !important;
   }

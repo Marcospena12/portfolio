@@ -8,6 +8,12 @@ import { GlowLogo } from "@/components/GlowLogo";
 import { ClockLamp } from "@/components/ClockLamp";
 import { QuotaMeter } from "@/components/QuotaMeter";
 import { OrbitLogos } from "@/components/OrbitLogos";
+import { GitlabSlackFlow } from "@/components/GitlabSlackFlow";
+import { KnowledgePipeline } from "@/components/KnowledgePipeline";
+import { HandoffFanout } from "@/components/HandoffFanout";
+import { NasRaidStack } from "@/components/NasRaidStack";
+import { PbsLayers } from "@/components/PbsLayers";
+
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -44,15 +50,6 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         <>
           {details.visual?.kind === "agent-map" && (
             <AgentMap nodes={details.visual.nodes} />
-          )}
-
-          {details.visual?.kind === "image" && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={details.visual.src}
-              alt={details.visual.alt}
-              className="mx-auto w-full max-w-4xl rounded-2xl border border-foreground/10"
-            />
           )}
 
           {details.visual?.kind === "tilt-logo" && (
@@ -92,7 +89,36 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-20 py-16">
               {details.visual.logos.map((logo) => (
                 <GlowLogo key={logo.src} src={logo.src} alt={logo.alt} size={320} />
+                
               ))}
+            </div>
+          )}
+          {details.visual?.kind === "gitlab-slack-flow" && (
+            <div className="mx-auto max-w-3xl py-16">
+              <GitlabSlackFlow devs={details.visual.devs} />
+            </div>
+          )}
+           {details.visual?.kind === "rag-pipeline" && (
+            <div className="mx-auto max-w-3xl py-16">
+              <KnowledgePipeline cadence={details.visual.cadence} />
+            </div>
+          )}
+
+          {details.visual?.kind === "handoff-fanout" && (
+            <div className="mx-auto max-w-3xl py-16">
+              <HandoffFanout monthly={details.visual.monthly} />
+            </div>
+          )}
+
+          {details.visual?.kind === "nas-raid-stack" && (
+            <div className="mx-auto max-w-3xl py-16">
+              <NasRaidStack />
+            </div>
+          )}
+
+          {details.visual?.kind === "pbs-layers" && (
+            <div className="mx-auto max-w-3xl py-16">
+              <PbsLayers />
             </div>
           )}
 
