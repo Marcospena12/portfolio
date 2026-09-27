@@ -21,7 +21,7 @@ export const contactLinks: ContactLink[] = [
   {
     id: "linkedin",
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/marcos-vin%C3%ADcius-costa-pena-342327317/",
+    href: "https://www.linkedin.com/in/marcos-pena-342327317/",
     icon: "FaLinkedin",
   },
 ];
