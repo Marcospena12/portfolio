@@ -1,6 +1,9 @@
+import { T } from "@/components/T";
+import type { Localized } from "@/data/translations";
+
 type MetricCardProps = {
-  value: string;
-  label: string;
+  value: Localized;
+  label: Localized;
   className?: string;
   size?: "sm" | "md" | "lg";
 };
@@ -16,8 +19,12 @@ export function MetricCard({ value, label, className = "", size = "md" }: Metric
 
   return (
     <div className={`led-border rounded-xl bg-background/80 ${s.padding} text-center backdrop-blur-sm ${className}`}>
-      <p className={`${s.value} font-bold`}>{value}</p>
-      <p className={`mt-1 ${s.label} text-foreground/50`}>{label}</p>
+      <p className={`${s.value} font-bold`}>
+        <T value={value} />
+      </p>
+      <p className={`mt-1 ${s.label} text-foreground/50`}>
+        <T value={label} />
+      </p>
     </div>
   );
 }

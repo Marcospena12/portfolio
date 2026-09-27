@@ -7,11 +7,13 @@ import * as SiIcons from "react-icons/si";
 import * as FaIcons from "react-icons/fa";
 import type { IconType } from "react-icons";
 import type { CSSProperties } from "react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const allIcons = { ...SiIcons, ...FaIcons };
 
 export function ProjectCard({ project }: { project: Project }) {
   const router = useRouter();
+  const { locale, t } = useLanguage();
   const projectTechs = technologies.filter((tech) =>
     project.techIds.includes(tech.id)
   );
@@ -33,20 +35,20 @@ export function ProjectCard({ project }: { project: Project }) {
       </div>
 
       <span className="mb-3 w-fit rounded-full bg-foreground/10 px-3 py-1 text-xs uppercase tracking-wide text-foreground/70">
-        {project.type}
+        {t.projects.typeLabels[project.type]}
       </span>
-      <h2 className="mb-2 pr-16 text-xl font-semibold">{project.title}</h2>
-      <p className="mb-4 text-sm text-foreground/70">{project.description}</p>
+      <h2 className="mb-2 pr-16 text-xl font-semibold">{project.title[locale]}</h2>
+      <p className="mb-4 text-sm text-foreground/70">{project.description[locale]}</p>
 
       {project.link && (
-         <a
+        <a
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
           className="mt-auto w-fit text-sm font-medium underline underline-offset-4"
         >
-          Ver projeto →
+          {t.projects.viewProject}
         </a>
       )}
     </div>

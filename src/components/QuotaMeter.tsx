@@ -2,11 +2,34 @@
 
 import { useEffect, useState } from "react";
 import { FaPrint, FaSyncAlt } from "react-icons/fa";
+import { useLanguage } from "@/components/LanguageProvider";
+import type { Localized } from "@/data/translations";
 
-type Room = { label: string; used: number; quota: number };
+type Room = { label: Localized; used: number; quota: number };
+
+const HEADER: Localized = {
+  pt: "Cota mensal por sala",
+  en: "Monthly quota per room",
+};
+
+const SUBHEADER: Localized = {
+  pt: "SAVAPAGE · impressão compartilhada",
+  en: "SAVAPAGE · shared printing",
+};
+
+const AUTO_RENEWAL: Localized = {
+  pt: "Renovação automática · todo início de mês",
+  en: "Automatic renewal · start of every month",
+};
+
+const MANUAL_ADJUST: Localized = {
+  pt: "Ajuste manual pelo gestor",
+  en: "Manual adjustment by the manager",
+};
 
 export function QuotaMeter({ rooms }: { rooms: Room[] }) {
   const [mounted, setMounted] = useState(false);
+  const { locale } = useLanguage();
 
   useEffect(() => {
   setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
@@ -20,8 +43,8 @@ export function QuotaMeter({ rooms }: { rooms: Room[] }) {
             <FaPrint className="text-lg" />
           </div>
           <div>
-            <h2 className="font-semibold">Cota mensal por sala</h2>
-            <p className="text-xs text-foreground/50">SAVAPAGE · impressão compartilhada</p>
+            <h2 className="font-semibold">{HEADER[locale]}</h2>
+            <p className="text-xs text-foreground/50">{SUBHEADER[locale]}</p>
           </div>
         </div>
         <FaSyncAlt className="text-foreground/30" />
@@ -31,8 +54,10 @@ export function QuotaMeter({ rooms }: { rooms: Room[] }) {
         {rooms.map((room, i) => {
           const pct = Math.min(Math.round((room.used / room.quota) * 100), 100);
           return (
-            <div key={room.label} className="flex items-center gap-4">
-              <span className="w-20 shrink-0 text-sm text-foreground/70">{room.label}</span>
+            <div key={room.label.pt} className="flex items-center gap-4">
+              <span className="w-20 shrink-0 text-sm text-foreground/70">
+                {room.label[locale]}
+              </span>
               <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-foreground/10">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-amber-400/70 to-amber-500/80"
@@ -52,10 +77,10 @@ export function QuotaMeter({ rooms }: { rooms: Room[] }) {
 
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full bg-amber-400/15 px-3 py-1 text-xs text-amber-400">
-          Renovação automática · todo início de mês
+          {AUTO_RENEWAL[locale]}
         </span>
         <span className="rounded-full bg-foreground/10 px-3 py-1 text-xs text-foreground/60">
-          Ajuste manual pelo gestor
+          {MANUAL_ADJUST[locale]}
         </span>
       </div>
     </div>

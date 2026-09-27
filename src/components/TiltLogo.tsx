@@ -2,16 +2,19 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { useLanguage } from "@/components/LanguageProvider";
+import type { Localized } from "@/data/translations";
 
 type TiltLogoProps = {
   src: string;
-  alt: string;
+  alt: Localized;
   href?: string;
 };
 
 export function TiltLogo({ src, alt, href }: TiltLogoProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState("");
+  const { locale } = useLanguage();
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = ref.current!.getBoundingClientRect();
@@ -36,7 +39,7 @@ export function TiltLogo({ src, alt, href }: TiltLogoProps) {
       style={{ transform, transformStyle: "preserve-3d" }}
       className="led-border mx-auto flex h-80 w-80 items-center justify-center rounded-2xl border border-foreground/10 bg-background/60 p-12 backdrop-blur-sm transition-transform duration-200 ease-out"
     >
-      <Image src={src} alt={alt} width={220} height={220} className="pointer-events-none" />
+      <Image src={src} alt={alt[locale]} width={220} height={220} className="pointer-events-none" />
     </div>
   );
 

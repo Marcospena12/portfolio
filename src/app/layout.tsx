@@ -19,7 +19,27 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Marcos — Portfólio",
-  description: "Portfólio de desenvolvimento e automações",
+  description:
+    "Portfólio de Marcos — desenvolvimento, automações e tecnologia.",
+
+  metadataBase: new URL("https://marcos-pena.vercel.app"),
+
+  openGraph: {
+    title: "Marcos — Portfólio",
+    description:
+      "Portfólio de Marcos — desenvolvimento, automações e tecnologia.",
+    url: "https://marcos-pena.vercel.app/",
+    siteName: "Marcos — Portfólio",
+    locale: "pt_BR",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Marcos — Portfólio",
+    description:
+      "Portfólio de Marcos — desenvolvimento, automações e tecnologia.",
+  },
 };
 
 export default function RootLayout({

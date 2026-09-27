@@ -3,10 +3,14 @@
 import { FaSlack, FaUser } from "react-icons/fa";
 import { SiGitlab, SiN8N } from "react-icons/si";
 import type { IconType } from "react-icons";
+import { useLanguage } from "@/components/LanguageProvider";
+import type { Localized } from "@/data/translations";
 
 const GITLAB_COLOR = "#FC6D26";
 const N8N_COLOR = "#EA4B71";
 const SLACK_COLOR = "#4A154B";
+
+const DEVS_LABEL: Localized = { pt: "Devs", en: "Devs" };
 
 type Props = {
   devs?: number;
@@ -49,6 +53,8 @@ function Connector({ color, delay }: { color: string; delay: string }) {
 }
 
 export function GitlabSlackFlow({ devs = 3 }: Props) {
+  const { locale } = useLanguage();
+
   return (
     <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 rounded-2xl border border-foreground/10 bg-background/40 p-8 backdrop-blur-sm">
       <div className="flex w-full items-center gap-3">
@@ -62,7 +68,7 @@ export function GitlabSlackFlow({ devs = 3 }: Props) {
 
           <div className="relative flex items-center">
             <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-[0.2em] text-foreground/40 uppercase">
-              Devs
+              {DEVS_LABEL[locale]}
             </span>
 
             <div className="flex items-stretch gap-3">

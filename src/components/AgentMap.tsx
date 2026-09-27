@@ -1,9 +1,11 @@
 import { LuizaAvatar } from "@/components/LuizaAvatar";
+import { T } from "@/components/T";
+import type { Localized } from "@/data/translations";
 import { FaRobot } from "react-icons/fa";
 
 export type FloatingNode = {
   id: string;
-  label: string;
+  label: Localized;
   color: string;
   top: string;
   left: string;
@@ -87,7 +89,7 @@ export function AgentMap({ nodes }: { nodes: FloatingNode[] }) {
         </div>
 
         {/* 4. CAMADA SUPERIOR (z-20): BALÕES ESTÁTICOS COM FUNDO SÓLIDO */}
-        {nodes.map((node, i) => (
+        {nodes.map((node) => (
           <div
             key={node.id}
             style={{ top: node.top, left: node.left }}
@@ -105,7 +107,9 @@ export function AgentMap({ nodes }: { nodes: FloatingNode[] }) {
                 className="h-2 w-2 shrink-0 rounded-full animate-pulse shadow-sm"
               />
               <FaRobot style={{ color: node.color }} className="shrink-0 text-sm" />
-              <span style={{ color: node.color }}>{node.label}</span>
+              <span style={{ color: node.color }}>
+                <T value={node.label} />
+              </span>
             </div>
           </div>
         ))}

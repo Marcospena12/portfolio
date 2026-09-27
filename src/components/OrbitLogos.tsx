@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import { useLanguage } from "@/components/LanguageProvider";
+import type { Localized } from "@/data/translations";
 
-type OrbitLogo = { src: string; alt: string };
+type OrbitLogo = { src: string; alt: Localized };
 type OrbitLogosProps = {
   logos: OrbitLogo[];
   radius?: number;
@@ -13,6 +15,7 @@ type OrbitLogosProps = {
 
 export function OrbitLogos({ logos, radius = 130, size = 56, duration = 18 }: OrbitLogosProps) {
   const box = radius * 2 + size;
+  const { locale } = useLanguage();
 
   return (
     <div
@@ -46,7 +49,7 @@ export function OrbitLogos({ logos, radius = 130, size = 56, duration = 18 }: Or
                   />
                   <Image
                     src={logo.src}
-                    alt={logo.alt}
+                    alt={logo.alt[locale]}
                     width={size}
                     height={size}
                     className="relative object-contain"

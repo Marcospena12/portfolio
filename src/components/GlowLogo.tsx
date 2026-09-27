@@ -2,16 +2,19 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { useLanguage } from "@/components/LanguageProvider";
+import type { Localized } from "@/data/translations";
 
 type GlowLogoProps = {
   src: string;
-  alt: string;
+  alt: Localized;
   size?: number;
 };
 
 export function GlowLogo({ src, alt, size = 200 }: GlowLogoProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState("");
+  const { locale } = useLanguage();
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = ref.current!.getBoundingClientRect();
@@ -41,7 +44,7 @@ export function GlowLogo({ src, alt, size = 200 }: GlowLogoProps) {
       >
         <Image
           src={src}
-          alt={alt}
+          alt={alt[locale]}
           width={size}
           height={size}
           className="pointer-events-none object-contain"

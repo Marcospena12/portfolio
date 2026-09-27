@@ -2,8 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { FaLightbulb } from "react-icons/fa";
+import { useLanguage } from "@/components/LanguageProvider";
+import type { Locale, Localized } from "@/data/translations";
 
 const CYCLE_MS = 20_000; // 24h = 10s reais
+
+const LIGHT_ON: Localized = { pt: "Luz acesa", en: "Light on" };
+const LIGHT_OFF: Localized = { pt: "Luz apagada", en: "Light off" };
+const CYCLE_LABEL: Localized = { pt: "ciclo 24h/20s", en: "24h/20s cycle" };
+
+const SCHEDULE_TEXT: Record<Locale, (on: string, off: string) => string> = {
+  pt: (on, off) => `Liga ${on} e desliga ${off}`,
+  en: (on, off) => `Turns on at ${on} and off at ${off}`,
+};
 
 function toMinutes(t: string) {
   const [h, m] = t.split(":").map(Number);
@@ -12,6 +23,7 @@ function toMinutes(t: string) {
 
 export function ClockLamp({ schedule }: { schedule: { on: string; off: string } }) {
   const [minutes, setMinutes] = useState(0);
+  const { locale } = useLanguage();
   const onMin = toMinutes(schedule.on);
   const offMin = toMinutes(schedule.off);
 
@@ -119,18 +131,16 @@ export function ClockLamp({ schedule }: { schedule: { on: string; off: string } 
             isOn ? "bg-amber-400/15 text-amber-400" : "bg-foreground/10 text-foreground/60"
           }`}
         >
-          {isOn ? "Luz acesa" : "Luz apagada"}
+          {(isOn ? LIGHT_ON : LIGHT_OFF)[locale]}
         </span>
 
-<p className="text-xs text-foreground/40">
-         Liga 07:00 e desliga 20:00
-
+        <p className="text-xs text-foreground/40">
+          {SCHEDULE_TEXT[locale](schedule.on, schedule.off)}
         </p>
 
         <p className="text-xs text-foreground/40">
-          {schedule.on} → {schedule.off} · ciclo 24h/20s
+          {schedule.on} → {schedule.off} · {CYCLE_LABEL[locale]}
         </p>
-
       </div>
     </div>
   );

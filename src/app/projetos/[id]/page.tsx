@@ -1,5 +1,7 @@
 import { projects } from "@/data/projects";
 import { notFound } from "next/navigation";
+import { T } from "@/components/T";
+import { projectSectionTitles } from "@/data/translations";
 import { AgentMap } from "@/components/AgentMap";
 import { MetricCard } from "@/components/MetricCard";
 import { ScrollHint } from "@/components/ScrollHint";
@@ -34,13 +36,17 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       {details && <ScrollHint />}
 
       <div className="mx-auto max-w-3xl">
-        <h1 className="gradient-text mb-4 text-4xl font-bold">{project.title}</h1>
-        <p className="mb-10 text-foreground/70">{project.description}</p>
+        <h1 className="gradient-text mb-4 text-4xl font-bold">
+          <T value={project.title} />
+        </h1>
+        <p className="mb-10 text-foreground/70">
+          <T value={project.description} />
+        </p>
 
         {details && (
           <div className="mb-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {details.metrics.map((metric) => (
-              <MetricCard key={metric.label} {...metric} size="lg" />
+              <MetricCard key={metric.label.pt} {...metric} size="lg" />
             ))}
           </div>
         )}
@@ -124,16 +130,22 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
           <div className="mx-auto max-w-3xl space-y-20 pt-20">
             <section id="arquitetura">
-              <h2 className="mb-4 text-2xl font-semibold">Arquitetura</h2>
-              <p className="text-foreground/70">{details.architecture}</p>
+              <h2 className="mb-4 text-2xl font-semibold">
+                <T value={projectSectionTitles.architecture} />
+              </h2>
+              <p className="text-foreground/70">
+                <T value={details.architecture} />
+              </p>
             </section>
 
             <section id="stack">
-              <h2 className="mb-4 text-2xl font-semibold">Stack técnico</h2>
+              <h2 className="mb-4 text-2xl font-semibold">
+                <T value={projectSectionTitles.stack} />
+              </h2>
               <ul className="space-y-2">
                 {details.stack.map((item, i) => (
                   <li key={i} className="text-foreground/70">
-                    • {item}
+                    • <T value={item} />
                   </li>
                 ))}
               </ul>
@@ -142,16 +154,18 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {details.agentCategories && (
               <section id="subagentes">
                 <h2 className="mb-6 text-2xl font-semibold">
-                  {details.categoriesTitle ?? "Subagentes especializados"}
+                  <T value={details.categoriesTitle ?? projectSectionTitles.subagents} />
                 </h2>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   {details.agentCategories.map((cat) => (
-                    <div key={cat.label} className="rounded-xl border border-foreground/10 p-5">
-                      <h3 className="mb-3 font-semibold">{cat.label}</h3>
+                    <div key={cat.label.pt} className="rounded-xl border border-foreground/10 p-5">
+                      <h3 className="mb-3 font-semibold">
+                        <T value={cat.label} />
+                      </h3>
                       <ul className="space-y-1">
                         {cat.items.map((item, i) => (
                           <li key={i} className="text-sm text-foreground/70">
-                            • {item}
+                            • <T value={item} />
                           </li>
                         ))}
                       </ul>
@@ -162,11 +176,13 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             )}
 
             <section id="diferenciais">
-              <h2 className="mb-4 text-2xl font-semibold">Diferenciais</h2>
+              <h2 className="mb-4 text-2xl font-semibold">
+                <T value={projectSectionTitles.differentials} />
+              </h2>
               <ul className="space-y-2">
                 {details.differentials.map((item, i) => (
                   <li key={i} className="text-foreground/70">
-                    • {item}
+                    • <T value={item} />
                   </li>
                 ))}
               </ul>
