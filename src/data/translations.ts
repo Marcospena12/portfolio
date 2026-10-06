@@ -26,6 +26,20 @@ export const translations = {
       viewProject: "Ver projeto →",
       typeLabels: { trabalho: "Trabalho", pessoal: "Pessoal" },
     },
+    chat: {
+      title: "Fale com o Marcos",
+      status: "Online",
+      welcome: "Olá! 👋 Seja bem-vindo ao meu portfólio. Como posso te ajudar?",
+      placeholder: "Escreva sua mensagem...",
+      send: "Enviar mensagem",
+      open: "Abrir chat",
+      close: "Fechar chat",
+      minimize: "Minimizar chat",
+      unread: "Nova mensagem",
+      typing: "Digitando",
+      mockReply:
+        "Recebi sua mensagem! Este é um chat de demonstração — em breve estarei conectado a uma IA de verdade. 😄",
+    },
     sobre: {
       paragraphs: [ "Nasci em 2001, mas minha história com computadores começou bem antes de eu escolher isso como profissão. Desde 2007, tenho contato praticamente diário com computadores. Montar PC'S virou quase um hobby anual, e entre 2008 e 2012 passei boa parte do tempo em fóruns de tecnologia, absorvendo tudo que podia sobre o assunto.",
         "Estudei em escola pública e em 2023/2024, entrei na faculdade de Sistemas de Informação na PUC Minas, decisão natural depois de tantos anos de curiosidade acumulada.",
@@ -60,6 +74,20 @@ export const translations = {
       filteringBy: "Filtering by:",
       viewProject: "View project →",
       typeLabels: { trabalho: "Work", pessoal: "Personal" },
+    },
+    chat: {
+      title: "Chat with Marcos",
+      status: "Online",
+      welcome: "Hi! 👋 Welcome to my portfolio. How can I help you?",
+      placeholder: "Type a message...",
+      send: "Send message",
+      open: "Open chat",
+      close: "Close chat",
+      minimize: "Minimize chat",
+      unread: "New message",
+      typing: "Typing",
+      mockReply:
+        "Got your message! This is a demo chat — soon I'll be connected to a real AI. 😄",
     },
     sobre: {
       paragraphs: [ "I was born in 2001, but my story with computers started long before I chose it as a career. I've had daily contact with machines since 2007. Building computers became almost an annual hobby, and between 2008 and 2012 I spent a good chunk of my time on tech forums, soaking up everything I could on the subject.",

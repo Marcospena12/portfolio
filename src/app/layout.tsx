@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { BackgroundAurora } from "@/components/BackgroundAurora";
 import { BackgroundPhoto } from "@/components/BackgroundPhoto";
+import { ChatWidget } from "@/components/ChatWidget";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -58,6 +59,7 @@ export default function RootLayout({
               <Header />
               <div className="relative z-10 flex flex-1 flex-col">{children}</div>
             </div>
+            <ChatWidget />
           </LanguageProvider>
         </ThemeProvider>
       </body>

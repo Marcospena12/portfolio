@@ -24,7 +24,8 @@ export function ScrollHint() {
   const offset = CIRCUMFERENCE - (progress / 100) * CIRCUMFERENCE;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-6 left-6 z-40">
+      {/* left-6: canto oposto ao do ChatWidget (bolha de chat, bottom-6 right-6) */}
       <div className="relative h-14 w-14">
         <svg width="56" height="56" viewBox="0 0 56 56" className="-rotate-90">
           <circle cx="28" cy="28" r={RADIUS} fill="none" stroke="currentColor" strokeWidth="2" className="text-foreground/10" />
