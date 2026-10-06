@@ -3,7 +3,7 @@
 import { type RefObject } from "react";
 import { FaMinus, FaTimes } from "react-icons/fa";
 import { useLanguage } from "@/components/LanguageProvider";
-import { LuizaAvatar } from "@/components/LuizaAvatar";
+import { ChatAvatar } from "./ChatAvatar";
 
 type ChatHeaderProps = {
   /** Alça de arraste (só o header move a janela). */
@@ -26,10 +26,8 @@ export function ChatHeader({ handleRef, onMinimize, onClose, draggable }: ChatHe
       }`}
       data-chat-drag-handle
     >
-      {/* Avatar da Luiza, escalado de h-32 w-32 (tamanho original) */}
-      <div className="relative h-10 w-10 shrink-0 overflow-hidden [&>div]:h-10 [&>div]:w-10">
-        <LuizaAvatar />
-      </div>
+      {/* Avatar do chat — imagem definida em ChatWidget/config.ts */}
+      <ChatAvatar />
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-foreground">{t.chat.title}</p>
