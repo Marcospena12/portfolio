@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^2.27.0",
     "@xyflow/react": "^12.11.6",
     "next": "^16.3.5",
     "next-themes": "^0.4.6",

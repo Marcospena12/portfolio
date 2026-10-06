@@ -4,12 +4,17 @@ import { useState } from "react";
 import Image from "next/image";
 import { CHAT_AVATAR_ALT, CHAT_AVATAR_SRC } from "./config";
 
+type ChatAvatarProps = {
+  /** Tamanho em px (padrão 40, usado no header). */
+  size?: number;
+};
+
 /**
- * Avatar do header do chat.
+ * Avatar do chat (header e indicador "pensando...").
  * Usa a imagem de `public/chat/avatar.png` (definida em ./config.ts);
  * se ela ainda não existir, mostra as iniciais como fallback.
  */
-export function ChatAvatar() {
+export function ChatAvatar({ size = 40 }: ChatAvatarProps) {
   const [failed, setFailed] = useState(false);
   const showImage = CHAT_AVATAR_SRC && !failed;
 
@@ -18,10 +23,11 @@ export function ChatAvatar() {
       <Image
         src={CHAT_AVATAR_SRC}
         alt={CHAT_AVATAR_ALT}
-        width={40}
-        height={40}
+        width={size}
+        height={size}
         onError={() => setFailed(true)}
-        className="h-10 w-10 shrink-0 rounded-full object-cover"
+        className="shrink-0 rounded-full object-cover"
+        style={{ width: size, height: size }}
       />
     );
   }
@@ -30,7 +36,8 @@ export function ChatAvatar() {
   return (
     <div
       aria-label={CHAT_AVATAR_ALT}
-      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-semibold text-black dark:bg-sky-400"
+      className="flex shrink-0 items-center justify-center rounded-full bg-amber-500 font-semibold text-black dark:bg-sky-400"
+      style={{ width: size, height: size, fontSize: Math.round(size * 0.35) }}
     >
       {CHAT_AVATAR_ALT.trim().slice(0, 2).toUpperCase()}
     </div>

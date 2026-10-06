@@ -21,6 +21,7 @@ type ChatWindowProps = {
   isMobile: boolean;
   handleRef: RefObject<HTMLElement | null>;
   onSend: (content: string) => void | Promise<void>;
+  onRetry: (() => Promise<void>) | null;
   onMinimize: () => void;
   onClose: () => void;
 };
@@ -35,6 +36,7 @@ export function ChatWindow({
   isMobile,
   handleRef,
   onSend,
+  onRetry,
   onMinimize,
   onClose,
 }: ChatWindowProps) {
@@ -68,7 +70,7 @@ export function ChatWindow({
       style={style}
     >
       <ChatHeader handleRef={handleRef} onMinimize={onMinimize} onClose={onClose} draggable={!isMobile} />
-      <ChatMessages messages={messages} isTyping={isTyping} />
+      <ChatMessages messages={messages} isTyping={isTyping} onRetry={onRetry} />
       <ChatInput onSend={onSend} disabled={isTyping} />
     </div>
   );

@@ -27,18 +27,21 @@ export const translations = {
       typeLabels: { trabalho: "Trabalho", pessoal: "Pessoal" },
     },
     chat: {
-      title: "Fale com o Marcos",
+      title: "Ciri",
       status: "Online",
-      welcome: "Olá! 👋 Seja bem-vindo ao meu portfólio. Como posso te ajudar?",
-      placeholder: "Escreva sua mensagem...",
+      welcome: "Olá! 👋 Eu sou a Cirilla, assistente pessoal do Marcos. Pode me perguntar qualquer coisa, Marcos me treinou com tudo que eu preciso saber pra te ajudar.",
+      placeholder: "Pode perguntar qualquer coisa",
       send: "Enviar mensagem",
       open: "Abrir chat",
       close: "Fechar chat",
       minimize: "Minimizar chat",
       unread: "Nova mensagem",
       typing: "Digitando",
-      mockReply:
-        "Recebi sua mensagem! Este é um chat de demonstração — em breve estarei conectado a uma IA de verdade. 😄",
+      thinking: "Pensando",
+      retry: "Tentar novamente",
+      busy: "A IA está em alta demanda no momento. Tente novamente em instantes.",
+      error:
+        "Não consegui responder agora. Verifique sua conexão e tente novamente.",
     },
     sobre: {
       paragraphs: [ "Nasci em 2001, mas minha história com computadores começou bem antes de eu escolher isso como profissão. Desde 2007, tenho contato praticamente diário com computadores. Montar PC'S virou quase um hobby anual, e entre 2008 e 2012 passei boa parte do tempo em fóruns de tecnologia, absorvendo tudo que podia sobre o assunto.",
@@ -86,8 +89,10 @@ export const translations = {
       minimize: "Minimize chat",
       unread: "New message",
       typing: "Typing",
-      mockReply:
-        "Got your message! This is a demo chat — soon I'll be connected to a real AI. 😄",
+      thinking: "Thinking",
+      retry: "Try again",
+      busy: "The AI is experiencing high demand right now. Try again in a moment.",
+      error: "I couldn't reply right now. Check your connection and try again.",
     },
     sobre: {
       paragraphs: [ "I was born in 2001, but my story with computers started long before I chose it as a career. I've had daily contact with machines since 2007. Building computers became almost an annual hobby, and between 2008 and 2012 I spent a good chunk of my time on tech forums, soaking up everything I could on the subject.",

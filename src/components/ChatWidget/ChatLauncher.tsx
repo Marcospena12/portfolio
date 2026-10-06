@@ -2,7 +2,7 @@
 
 import { FaTimes } from "react-icons/fa";
 import { useLanguage } from "@/components/LanguageProvider";
-import { LAUNCHER_SIZE, WINDOW_MARGIN, type WindowPosition } from "./types";
+import { LAUNCHER_BOTTOM_MARGIN, LAUNCHER_SIZE, WINDOW_MARGIN, type WindowPosition } from "./types";
 
 type ChatLauncherProps = {
   open: boolean;
@@ -37,7 +37,7 @@ export function ChatLauncher({
         // Posição: canto fixo no mobile, derivada da janela no desktop.
         ...(position
           ? { left: position.x, top: position.y, width: LAUNCHER_SIZE, height: LAUNCHER_SIZE }
-          : { right: WINDOW_MARGIN, bottom: WINDOW_MARGIN, width: LAUNCHER_SIZE, height: LAUNCHER_SIZE }),
+          : { right: WINDOW_MARGIN, bottom: LAUNCHER_BOTTOM_MARGIN, width: LAUNCHER_SIZE, height: LAUNCHER_SIZE }),
         // Suaviza o movimento quando a janela é arrastada; sem transição
         // durante o próprio drag para a bolha seguir 1:1.
         transition: isDragging
