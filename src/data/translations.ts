@@ -29,8 +29,8 @@ export const translations = {
     chat: {
       title: "Ciri",
       status: "Online",
-      welcome: "Olá! 👋 Eu sou a Cirilla, assistente pessoal do Marcos. Pode me perguntar qualquer coisa, Marcos me treinou com tudo que eu preciso saber pra te ajudar.",
-      placeholder: "Pode perguntar qualquer coisa",
+      welcome: "Olá! 👋 Eu sou a Cirilla, mas pode me chamar de Ciri, assistente pessoal do Marcos. Pode me perguntar qualquer coisa, Marcos me treinou com tudo que eu preciso saber pra te ajudar.",
+      placeholder: "Pergunta qualquer coisa aí, vai",
       send: "Enviar mensagem",
       open: "Abrir chat",
       close: "Fechar chat",
@@ -79,10 +79,10 @@ export const translations = {
       typeLabels: { trabalho: "Work", pessoal: "Personal" },
     },
     chat: {
-      title: "Chat with Marcos",
+      title: "Ciri",
       status: "Online",
-      welcome: "Hi! 👋 Welcome to my portfolio. How can I help you?",
-      placeholder: "Type a message...",
+      welcome: "Hi, I'm Cirilla, but you can call me Ciri. I'm Marcos' personal assistant. You can ask me anything you want — Marcos has taught me everything I need to know about him.",
+      placeholder: "Ask something...",
       send: "Send message",
       open: "Open chat",
       close: "Close chat",
@@ -91,7 +91,7 @@ export const translations = {
       typing: "Typing",
       thinking: "Thinking",
       retry: "Try again",
-      busy: "The AI is experiencing high demand right now. Try again in a moment.",
+      busy: "The AI is experiencing high demand right now. Try again in a moment. I've already sent an alert to Marcos — he'll sort this out soon.",
       error: "I couldn't reply right now. Check your connection and try again.",
     },
     sobre: {
