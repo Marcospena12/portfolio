@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { ChatAvatar } from "./ChatAvatar";
+import { ChatMarkdown } from "./ChatMarkdown";
 import type { Message } from "./types";
 
 type ChatMessagesProps = {
@@ -46,7 +47,7 @@ export function ChatMessages({ messages, isTyping, onRetry }: ChatMessagesProps)
             className={`chat-msg-in flex flex-col ${isUser ? "items-end" : "items-start"}`}
           >
             <div
-              className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed break-words ${
+              className={`max-w-[80%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed break-words ${
                 isUser
                   ? "rounded-br-md bg-foreground text-background"
                   : isError
@@ -54,8 +55,16 @@ export function ChatMessages({ messages, isTyping, onRetry }: ChatMessagesProps)
                     : "rounded-bl-md border border-foreground/10 bg-foreground/5 text-foreground"
               }`}
             >
-              {/* Welcome resolve ao vivo para acompanhar a troca de idioma */}
-              {message.kind === "welcome" ? t.chat.welcome : message.content}
+              {/* Welcome resolve ao vivo para acompanhar a troca de idioma.
+                  Só a resposta da IA passa pelo markdown; user, welcome e
+                  erro ficam texto puro. */}
+              {message.kind === "welcome" ? (
+                t.chat.welcome
+              ) : isUser || isError ? (
+                message.content
+              ) : (
+                <ChatMarkdown text={message.content} />
+              )}
               {isError && onRetry && (
                 <button
                   type="button"
