@@ -1,4 +1,4 @@
-export function LuizaAvatar() {
+export function SuperAgenteAvatar() {
   return (
     <div className="relative h-32 w-32 flex items-center justify-center">
       {/* Glow externo bem suave e sutil */}

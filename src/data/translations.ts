@@ -29,7 +29,7 @@ export const translations = {
     chat: {
       title: "Ciri",
       status: "Online",
-      welcome: "Olá! 👋 Eu sou a Cirilla, mas pode me chamar de Ciri, assistente pessoal do Marcos. Pode me perguntar qualquer coisa, Marcos me treinou com tudo que eu preciso saber pra te ajudar.",
+      welcome: "Olá! 👋 Eu sou a Cirilla, mas pode me chamar de Ciri, assistente pessoal do Marcos. Pode me perguntar qualquer coisa, Marcos me treinou (E continua treinando) com tudo que eu preciso saber pra te ajudar.",
       placeholder: "Pergunta qualquer coisa aí, vai",
       send: "Enviar mensagem",
       open: "Abrir chat",

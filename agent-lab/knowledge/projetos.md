@@ -1,6 +1,6 @@
 # Projetos do Marcos (curadoria do portfólio)
 
-## 1. luiza — Super Agente de IA para Suporte (n8n)
+## 1. super-agente — Super-Agente de IA para Suporte (n8n)
 - Sistema multiagente hierárquico no n8n para automatizar suporte via Crisp, roteando cada conversa ao especialista certo.
 - Resolve 70% das ~700 conversas mensais de forma autônoma e humanizada. São 10 subagentes, 6 dashboards no Metabase.
 - Arquitetura: um orquestrador central classifica e roteia pro especialista (em vez de um agente genérico), reduzindo alucinação.

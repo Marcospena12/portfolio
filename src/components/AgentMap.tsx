@@ -1,4 +1,4 @@
-import { LuizaAvatar } from "@/components/LuizaAvatar";
+import { SuperAgenteAvatar } from "@/components/SuperAgenteAvatar";
 import { T } from "@/components/T";
 import type { Localized } from "@/data/translations";
 import { FaRobot } from "react-icons/fa";
@@ -80,9 +80,9 @@ export function AgentMap({ nodes }: { nodes: FloatingNode[] }) {
           />
         ))}
 
-        {/* 3. CENTRO (z-30): ORQUESTRADORA LUIZA */}
+        {/* 3. CENTRO (z-30): ORQUESTRADOR SUPER-AGENTE */}
         <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-          <LuizaAvatar />
+          <SuperAgenteAvatar />
           <span className="mt-2 text-sm font-semibold tracking-wider text-pink-400 drop-shadow-md">
             
           </span>

@@ -36,8 +36,8 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    id: "luiza",
-    title: { pt: "Super Agente de IA para Suporte", en: "AI Super Agent for Support" },
+    id: "super-agente",
+    title: { pt: "Super-Agente de IA para Suporte", en: "AI Super Agent for Support" },
     description: {
       pt: "Sistema multiagente hierárquico construído no n8n para automatizar o suporte via Crisp, roteando cada conversa ao especialista certo. Resolve 70% das ~700 conversas mensais de forma totalmente autônoma e HUMANIZADA.",
       en: "Hierarchical multi-agent system built on n8n to automate support via Crisp, routing each conversation to the right specialist. Resolves 70% of the ~700 monthly conversations fully autonomously, in a human way.",
