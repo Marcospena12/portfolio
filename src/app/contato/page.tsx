@@ -1,34 +1,23 @@
-"use client";
-
-import { contactLinks } from "@/data/contact";
-import * as FaIcons from "react-icons/fa";
-import * as SiIcons from "react-icons/si";
-import type { IconType } from "react-icons";
+import type { Metadata } from "next";
 import { PageHeading } from "@/components/PageHeading";
+import { ContatoLinks } from "@/components/ContatoLinks";
 
-const allIcons = { ...FaIcons, ...SiIcons };
+export const metadata: Metadata = {
+  title: "Contato",
+  description: "Fale com Marcos por e-mail, GitHub ou LinkedIn.",
+  alternates: { canonical: "/contato" },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contato — Marcos",
+    description: "Fale com Marcos por e-mail, GitHub ou LinkedIn.",
+  },
+};
 
 export default function ContatoPage() {
   return (
     <main className="flex-1 px-6 pt-16 pb-20 text-foreground">
       <PageHeading pageKey="contato" />
-      <div className="mx-auto flex max-w-md flex-col gap-3">
-        {contactLinks.map((link) => {
-          const Icon = allIcons[link.icon as keyof typeof allIcons] as IconType;
-          return (
-            <a
-              key={link.id}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 rounded-xl border border-foreground/10 p-4 transition-colors hover:border-foreground/30"
-            >
-              <Icon className="text-xl" />
-              <span>{link.label}</span>
-            </a>
-          );
-        })}
-      </div>
+      <ContatoLinks />
     </main>
   );
 }

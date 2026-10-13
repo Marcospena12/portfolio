@@ -22,6 +22,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // Mantém o atributo lang do documento em sincronia (acessibilidade + SEO).
+  useEffect(() => {
+    document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
+  }, [locale]);
+
   function setLocale(newLocale: Locale) {
     setLocaleState(newLocale);
     localStorage.setItem("locale", newLocale);

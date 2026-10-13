@@ -7,6 +7,13 @@ import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { BackgroundAurora } from "@/components/BackgroundAurora";
 import { BackgroundPhoto } from "@/components/BackgroundPhoto";
 import { ChatWidget } from "@/components/ChatWidget";
+import {
+  SITE_DESCRIPTION,
+  SITE_KNOWS_ABOUT,
+  SITE_NAME,
+  SITE_SOCIALS,
+  SITE_URL,
+} from "@/data/site";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -19,28 +26,38 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Marcos — Portfólio",
-  description:
-    "Portfólio de Marcos — desenvolvimento, automações e tecnologia.",
-
-  metadataBase: new URL("https://marcos-pena.vercel.app"),
+  metadataBase: new URL(SITE_URL),
+  // Template: páginas filhas definem só a parte específica ("Projetos — Marcos").
+  title: { default: SITE_NAME, template: "%s — Marcos" },
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
 
   openGraph: {
-    title: "Marcos — Portfólio",
-    description:
-      "Portfólio de Marcos — desenvolvimento, automações e tecnologia.",
-    url: "https://marcos-pena.vercel.app/",
-    siteName: "Marcos — Portfólio",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     locale: "pt_BR",
     type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Marcos — Portfólio",
-    description:
-      "Portfólio de Marcos — desenvolvimento, automações e tecnologia.",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
   },
+};
+
+// Dados estruturados (JSON-LD): descrevem "quem é o Marcos" para buscadores e
+// IAs. O replace de "<" evita XSS ao injetar via dangerouslySetInnerHTML.
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Marcos",
+  jobTitle: "Desenvolvedor",
+  url: SITE_URL,
+  sameAs: SITE_SOCIALS,
+  knowsAbout: SITE_KNOWS_ABOUT,
 };
 
 export default function RootLayout({
@@ -51,6 +68,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <ThemeProvider>
           <LanguageProvider>
              <div className="relative flex min-h-dvh flex-col">

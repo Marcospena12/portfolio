@@ -1,19 +1,25 @@
-"use client";
-
+import type { Metadata } from "next";
 import { PageHeading } from "@/components/PageHeading";
-import { useLanguage } from "@/components/LanguageProvider";
+import { SobreContent } from "@/components/SobreContent";
+
+export const metadata: Metadata = {
+  title: "Sobre",
+  description:
+    "Conheça a trajetória de Marcos: de DevOps e infraestrutura a desenvolvimento web, automações e agentes de IA.",
+  alternates: { canonical: "/sobre" },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sobre — Marcos",
+    description:
+      "Conheça a trajetória de Marcos: de DevOps e infraestrutura a desenvolvimento web, automações e agentes de IA.",
+  },
+};
 
 export default function SobrePage() {
-  const { t } = useLanguage();
-
   return (
     <main className="flex-1 px-6 pt-16 pb-20 text-foreground">
       <PageHeading pageKey="sobre" />
-      <div className="mx-auto max-w-2xl space-y-4 text-foreground/80">
-        {t.sobre.paragraphs.map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
-        ))}
-      </div>
+      <SobreContent />
     </main>
   );
 }

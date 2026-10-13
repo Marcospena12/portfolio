@@ -1,5 +1,6 @@
 import { projects } from "@/data/projects";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { T } from "@/components/T";
 import { projectSectionTitles } from "@/data/translations";
 import { AgentMap } from "@/components/AgentMap";
@@ -20,6 +21,36 @@ import { PbsLayers } from "@/components/PbsLayers";
 type PageProps = {
   params: Promise<{ id: string }>;
 };
+
+// Pré-renderiza os projetos no build (SSG): HTML pronto melhora SEO e LCP.
+export function generateStaticParams() {
+  return projects.map((project) => ({ id: project.id }));
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const project = projects.find((p) => p.id === id);
+  if (!project) return {};
+
+  return {
+    title: project.title.pt,
+    description: project.description.pt,
+    alternates: { canonical: `/projetos/${project.id}` },
+    openGraph: {
+      title: project.title.pt,
+      description: project.description.pt,
+      type: "article",
+      url: `/projetos/${project.id}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title.pt,
+      description: project.description.pt,
+    },
+  };
+}
 
 export default async function ProjectDetailPage({ params }: PageProps) {
   const { id } = await params;

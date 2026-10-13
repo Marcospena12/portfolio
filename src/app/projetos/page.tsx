@@ -2,6 +2,20 @@ import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ProjectFilterNotice } from "@/components/ProjectFilterNotice";
 import { PageHeading } from "@/components/PageHeading";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Projetos",
+  description:
+    "Projetos de Marcos: automações, agentes de IA, infraestrutura e desenvolvimento web.",
+  alternates: { canonical: "/projetos" },
+  twitter: {
+    card: "summary_large_image",
+    title: "Projetos — Marcos",
+    description:
+      "Projetos de Marcos: automações, agentes de IA, infraestrutura e desenvolvimento web.",
+  },
+};
 
 type PageProps = {
   searchParams: Promise<{ tech?: string }>;
