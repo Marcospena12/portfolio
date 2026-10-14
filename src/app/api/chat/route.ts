@@ -89,6 +89,13 @@ function isTransientHttp(status: number): boolean {
   return status === 408 || status === 429 || (status >= 500 && status <= 504);
 }
 
+/// Modelo inexistente/indisponível na conta: é um erro do modelo, não da
+/// credencial. Nesse caso vale tentar o próximo modelo do mesmo provider em
+/// vez de descartar o provider inteiro.
+function isModelNotFound(error: ProviderError): boolean {
+  return error.status === 404 || /model_not_found|does not exist|not found/i.test(error.message);
+}
+
 /// Chamada OpenAI-compatible (Groq, OpenRouter etc.) via fetch nativo.
 async function callOpenAICompatible(opts: {
   baseUrl: string;
@@ -195,7 +202,7 @@ function buildProviders(contents: IncomingMessage[], origin: string | null): Pro
   if (groqKey) {
     providers.push({
       name: "groq",
-      models: ["meta-llama/llama-3.3-70b-versatile", "meta-llama/llama-3.1-8b-instant"],
+      models: ["openai/gpt-oss-120b", "openai/gpt-oss-20b"],
       call: (model) =>
         callOpenAICompatible({
           baseUrl: "https://api.groq.com/openai/v1",
@@ -281,8 +288,10 @@ export async function POST(request: NextRequest) {
         );
         // Transitório: tenta o próximo modelo/provider. Permanente: pula o
         // provider inteiro (a chave/credential não vai melhorar nos modelos
-        // seguintes dele), mas ainda tenta os providers restantes.
-        if (providerError.kind === "permanent") break;
+        // seguintes dele), mas ainda tenta os providers restantes. Exceção:
+        // modelo inexistente (404) é problema do modelo, então segue para o
+        // próximo modelo do mesmo provider.
+        if (providerError.kind === "permanent" && !isModelNotFound(providerError)) break;
       }
     }
   }
