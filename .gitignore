@@ -34,12 +34,6 @@ yarn-error.log*
 .env*
 !.env.example
 
-# agent-lab (Ciri playground)
-/agent-lab/.venv/
-/agent-lab/__pycache__/
-/agent-lab/data/
-/agent-lab/.env
-
 # vercel
 .vercel
 
