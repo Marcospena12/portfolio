@@ -12,7 +12,6 @@
     "@ai-sdk/google": "^4.0.95",
     "@ai-sdk/groq": "^4.0.60",
     "@ai-sdk/openai-compatible": "^3.0.68",
-    "@google/genai": "^2.27.0",
     "@xyflow/react": "^12.11.6",
     "ai": "^7.0.140",
     "next": "^16.3.5",

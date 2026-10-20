@@ -2,6 +2,8 @@ import { tool } from "ai";
 import { z } from "zod";
 import { translations } from "@/data/translations";
 import {projects} from "@/data/projects";
+import { technologies } from "@/data/technologies";
+import { contactLinks } from "@/data/contact";
 
 const lang = z.enum(["pt", "en"]);
 
@@ -36,7 +38,7 @@ export const listProjects = tool({
 
 
 export const getProject = tool({
-  description: "Retorna projetos um a um",
+  description: "Retorna o case completo de um projeto específico (arquitetura, stack, diferenciais e métricas) a partir do id. Use os ids retornados por listProjects.",
   inputSchema: z.object({
     id: z.string().describe("id do projeto, como retornado por listProjects"),
     lang,
@@ -72,3 +74,29 @@ export const getProject = tool({
     };
   },
 });
+
+export const listTechnologies = tool({ description: "Lista as tecnologias que o Marcos usa e domina, com um resumo de cada. Use quando perguntarem sobre stack, ferramentas ou tecnologias.",
+  inputSchema: z.object({}),
+  execute: async () => {
+    return {
+      technologies: technologies.map((t) => ({ id: t.id, name: t.name, summary: t.summary.split("\n")[0] })),
+    };
+  },})
+  
+  export const getContact = tool({
+  description: "Lista os contatos disponíveis pra conseguir falar com o Marcos.",
+  inputSchema: z.object({}),
+  execute: async () => {
+    return {
+      links: contactLinks.map((l) => ({id: l.id, label: l.label, href: l.href})),
+    };
+  },
+});
+
+export const tools = {
+  getBio,
+  listProjects,
+  getProject,
+  listTechnologies,
+  getContact,
+};
