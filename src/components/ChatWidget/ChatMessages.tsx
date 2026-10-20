@@ -75,12 +75,24 @@ export function ChatMessages({ messages, isTyping, onRetry }: ChatMessagesProps)
                 </button>
               )}
             </div>
-            <time
-              dateTime={message.timestamp.toISOString()}
-              className="mt-1 px-1 text-[10px] text-foreground/40"
-            >
-              {formatTime(message.timestamp, locale)}
-            </time>
+            <div className="mt-1 flex max-w-full flex-wrap items-center gap-1.5 px-1">
+              <time
+                dateTime={message.timestamp.toISOString()}
+                className="text-[10px] text-foreground/40"
+              >
+                {formatTime(message.timestamp, locale)}
+              </time>
+              {message.role === "assistant" && !message.kind && message.model && (
+                <span
+                  title={`${t.chat.answeredBy} ${message.model.label}${
+                    message.model.provider ? ` (${message.model.provider})` : ""
+                  }`}
+                  className="inline-flex max-w-[10rem] items-center rounded-full border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/50"
+                >
+                  <span className="truncate">{message.model.label}</span>
+                </span>
+              )}
+            </div>
           </div>
         );
       })}

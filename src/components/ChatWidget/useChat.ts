@@ -2,15 +2,23 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
-import type { Message } from "./types";
+import { STORAGE_KEYS, type Message, type MessageModel } from "./types";
 
 export interface UseChatReturn {
   messages: Message[];
   isTyping: boolean;
+  /**
+   * Quantidade de mensagens já presentes na hidratação (welcome + conversa
+   * salva). Usado pelo badge de não-lidas para não contar histórico antigo.
+   */
+  loadedCount: number;
   sendMessage: (content: string) => Promise<void>;
   retryLast: (() => Promise<void>) | null;
   clearMessages: () => void;
 }
+
+/** Mesmo limite do backend: histórico além disso é descartado no servidor. */
+const MAX_STORED_MESSAGES = 40;
 
 let counter = 0;
 function createId(): string {
@@ -18,10 +26,61 @@ function createId(): string {
   return `msg-${Date.now()}-${counter}`;
 }
 
+function parseMessageModel(raw: unknown): MessageModel | undefined {
+  if (typeof raw !== "object" || raw === null) return undefined;
+  const { label, id, provider } = raw as { label?: unknown; id?: unknown; provider?: unknown };
+  if (typeof label !== "string" || label.length === 0) return undefined;
+  return {
+    label,
+    ...(typeof id === "string" ? { id } : {}),
+    ...(typeof provider === "string" ? { provider } : {}),
+  };
+}
+
+/** Lê a conversa persistida; qualquer formato inválido volta `null`. */
+function parseStoredMessages(raw: string | null): Message[] | null {
+  if (!raw) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== "object" || parsed === null) return null;
+    const { v, messages } = parsed as { v?: unknown; messages?: unknown };
+    if (v !== 1 || !Array.isArray(messages)) return null;
+
+    const result: Message[] = [];
+    for (const item of messages) {
+      if (typeof item !== "object" || item === null) continue;
+      const { role, content, timestamp, model } = item as {
+        role?: unknown;
+        content?: unknown;
+        timestamp?: unknown;
+        model?: unknown;
+      };
+      if (role !== "user" && role !== "assistant") continue;
+      if (typeof content !== "string" || content.trim().length === 0) continue;
+      if (typeof timestamp !== "string") continue;
+      const time = new Date(timestamp);
+      if (Number.isNaN(time.getTime())) continue;
+
+      const parsedModel = parseMessageModel(model);
+      result.push({
+        id: createId(),
+        role,
+        content,
+        timestamp: time,
+        ...(parsedModel ? { model: parsedModel } : {}),
+      });
+    }
+    return result.slice(-MAX_STORED_MESSAGES);
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Gerencia o estado da conversa.
  *
- * Envia o histórico para `POST /api/chat` (Gemini) e renderiza a resposta.
+ * Envia o histórico para `POST /api/chat` (agente com tools e fallback de
+ * providers) e renderiza a resposta.
  * Em caso de falha, cria uma mensagem `kind: "error"` com botão de retry.
  */
 export function useChat(): UseChatReturn {
@@ -40,6 +99,12 @@ export function useChat(): UseChatReturn {
     },
   ]);
 
+  // Quantidade inicial de mensagens (welcome + histórico salvo) e flag de
+  // hidratação: a persistência só começa depois de ler o localStorage.
+  const [loadedCount, setLoadedCount] = useState(1);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const hydratedRef = useRef(false);
+
   // Guarda o AbortController da requisição ativa (limpa no unmount).
   const abortRef = useRef<AbortController | null>(null);
   // Timeout da requisição: o backend faz retry + fallback de modelo e pode
@@ -56,6 +121,44 @@ export function useChat(): UseChatReturn {
   useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
+
+  // Restaura a conversa salva uma única vez, pós-hidratação. O welcome fica
+  // de fora da persistência: o conteúdo dele acompanha o idioma.
+  useEffect(() => {
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+
+    const stored = parseStoredMessages(localStorage.getItem(STORAGE_KEYS.messages));
+    if (stored && stored.length > 0) {
+      setMessages((prev) => [...prev, ...stored]);
+      setLoadedCount(1 + stored.length);
+    }
+    setIsHydrated(true);
+  }, []);
+
+  // Persiste as mensagens (sem welcome nem erros) a cada mudança.
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    const stored = messages
+      .filter((message) => message.kind !== "welcome" && message.kind !== "error")
+      .map((message) => ({
+        role: message.role,
+        content: message.content,
+        timestamp: message.timestamp.toISOString(),
+        ...(message.model ? { model: message.model } : {}),
+      }))
+      .slice(-MAX_STORED_MESSAGES);
+
+    if (stored.length === 0) {
+      localStorage.removeItem(STORAGE_KEYS.messages);
+      return;
+    }
+    localStorage.setItem(
+      STORAGE_KEYS.messages,
+      JSON.stringify({ v: 1, messages: stored }),
+    );
+  }, [messages, isHydrated]);
 
   const requestReply = useCallback(
     async (history: Message[]) => {
@@ -82,23 +185,27 @@ export function useChat(): UseChatReturn {
           signal: controller.signal,
         });
 
-        const data: unknown = await res.json().catch(() => null);
+        const data = (await res.json().catch(() => null)) as {
+          message?: { content?: string };
+          model?: unknown;
+          error?: string;
+          code?: string;
+        } | null;
         if (!res.ok) {
-          const payload = data as { error?: string; code?: string } | null;
           // Traduz localmente os erros conhecidos (i18n); senão usa o texto
           // que veio da API.
           const message =
-            payload?.code === "busy"
+            data?.code === "busy"
               ? t.chat.busy
-              : payload?.code === "no_provider"
+              : data?.code === "no_provider"
                 ? t.chat.error
-                : payload?.error ?? t.chat.error;
+                : data?.error ?? t.chat.error;
           throw new Error(message);
         }
 
-        const content = (data as { message?: { content?: string } })?.message
-          ?.content;
+        const content = data?.message?.content;
         if (!content) throw new Error(t.chat.error);
+        const model = parseMessageModel(data?.model);
 
         setMessages((prev) => [
           ...prev,
@@ -107,6 +214,7 @@ export function useChat(): UseChatReturn {
             role: "assistant",
             content,
             timestamp: new Date(),
+            ...(model ? { model } : {}),
           },
         ]);
       } catch (error) {
@@ -182,6 +290,7 @@ export function useChat(): UseChatReturn {
     abortRef.current?.abort();
     abortRef.current = null;
     lastUserMessageRef.current = null;
+    localStorage.removeItem(STORAGE_KEYS.messages);
     // Volta ao estado inicial: apenas a mensagem de boas-vindas.
     setMessages([
       {
@@ -198,6 +307,7 @@ export function useChat(): UseChatReturn {
   return {
     messages,
     isTyping,
+    loadedCount,
     sendMessage,
     retryLast: retryEnabled ? retryLast : null,
     clearMessages,

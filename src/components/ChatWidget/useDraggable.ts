@@ -8,8 +8,6 @@ type UseDraggableOptions = {
   position: WindowPosition;
   /** Atualiza a posição durante o arraste. */
   onPositionChange: (position: WindowPosition) => void;
-  /** Dispara no pointerup — usado para persistir no localStorage. */
-  onCommit?: (position: WindowPosition) => void;
   /** Dimensões da janela para calcular os limites da viewport. */
   bounds: { width: number; height: number };
   viewport: Viewport;
@@ -27,7 +25,7 @@ export type UseDraggableReturn = {
  * Drag nativo com Pointer Events (sem dependências).
  * - Arrastável apenas pela alça (handle), não pelo corpo.
  * - Limita a janela à viewport.
- * - Persiste a posição via onCommit (localStorage fica no orquestrador).
+ * - A posição vive em memória no orquestrador (refresh volta ao default).
  *
  * Os listeners são anexados uma única vez; `disabled` e demais valores são
  * lidos via refs dentro dos handlers — assim mudanças (ex.: virar mobile)
@@ -36,7 +34,6 @@ export type UseDraggableReturn = {
 export function useDraggable({
   position,
   onPositionChange,
-  onCommit,
   bounds,
   viewport,
   disabled = false,
@@ -46,9 +43,9 @@ export function useDraggable({
 
   // Valores "frescos" para os handlers anexados uma única vez.
   // Atualizados pós-render: eventos do usuário sempre leem o valor mais novo.
-  const latest = useRef({ position, onPositionChange, onCommit, bounds, viewport, disabled });
+  const latest = useRef({ position, onPositionChange, bounds, viewport, disabled });
   useEffect(() => {
-    latest.current = { position, onPositionChange, onCommit, bounds, viewport, disabled };
+    latest.current = { position, onPositionChange, bounds, viewport, disabled };
   });
 
   const dragState = useRef<{ offsetX: number; offsetY: number } | null>(null);
@@ -121,12 +118,9 @@ export function useDraggable({
       if (handle!.hasPointerCapture(event.pointerId)) {
         handle!.releasePointerCapture(event.pointerId);
       }
-      // Persiste só no fim do arraste (não a cada frame).
-      const finalPos = lastPositionRef.current;
       setIsDragging(false);
       dragState.current = null;
       lastPositionRef.current = null;
-      if (finalPos) latest.current.onCommit?.(finalPos);
     }
 
     handle.addEventListener("pointerdown", onPointerDown);
@@ -142,7 +136,10 @@ export function useDraggable({
       dragState.current = null;
       lastPositionRef.current = null;
     };
-  }, [clampToViewport, endDrag]);
+    // `disabled` nas deps reanexa quando a janela abre (o header só existe com
+    // o chat aberto) e limpa os listeners ao fechar/mobile. Sem isso o efeito
+    // roda uma vez com handleRef nulo e o drag nunca é ligado.
+  }, [clampToViewport, endDrag, disabled]);
 
   return { isDragging, handleRef };
 }

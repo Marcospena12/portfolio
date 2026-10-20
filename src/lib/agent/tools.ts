@@ -84,7 +84,7 @@ export const listTechnologies = tool({ description: "Lista as tecnologias que o 
   },})
   
   export const getContact = tool({
-  description: "Lista os contatos disponíveis pra conseguir falar com o Marcos.",
+  description: "Lista os contatos disponíveis pra conseguir falar com o Marcos. Apresente cada item como link markdown com rótulo: [label](href).",
   inputSchema: z.object({}),
   execute: async () => {
     return {

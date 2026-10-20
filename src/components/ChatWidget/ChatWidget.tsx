@@ -13,7 +13,6 @@ import {
   getDefaultWindowPosition,
   getLauncherPosition,
   getWindowHeight,
-  parseStoredRatio,
   positionToRatio,
   ratioToPosition,
   type Viewport,
@@ -24,8 +23,9 @@ import "./chat-widget.css";
 
 /**
  * Orquestrador do widget de chat.
- * Responsável por: aberto/fechado (persistido), posição da janela (persistida
- * pelo useDraggable), mobile, badge de não-lidas, Esc e scroll-lock.
+ * Responsável por: aberto/fechado (persistido), posição da janela (só na
+ * sessão — refresh volta ao default), mobile, badge de não-lidas, Esc e
+ * scroll-lock.
  *
  * A posição é mantida como RATIO (0..1 dentro do espaço livre da viewport):
  * ao redimensionar a janela ou mudar o zoom do navegador, os pixels são
@@ -43,27 +43,25 @@ export function ChatWidget() {
   const [ratio, setRatio] = useState<WindowRatio | null>(null);
   const [viewport, setViewport] = useState<Viewport | null>(null);
 
-  const { messages, isTyping, sendMessage, retryLast } = useChat();
+  const { messages, isTyping, sendMessage, retryLast, clearMessages, loadedCount } =
+    useChat();
 
   // Quantidade de mensagens vistas por último com a janela aberta
   // (atualizada nos handlers de abrir/fechar — fonte do badge de não-lidas).
-  const [lastSeen, setLastSeen] = useState(0);
+  // `null` = ainda não interagiu nesta sessão: usa o histórico hidratado.
+  const [lastSeen, setLastSeen] = useState<number | null>(null);
 
-  // Restaura abertura + posição (uma única vez, pós-hidratação).
+  // Restaura abertura e inicializa na posição padrão (uma única vez,
+  // pós-hidratação). A posição vale só para a sessão: refresh sempre volta
+  // ao canto inferior direito.
   useEffect(() => {
     const current: Viewport = {
       width: window.innerWidth,
       height: window.innerHeight,
     };
-    const stored = parseStoredRatio(
-      localStorage.getItem(STORAGE_KEYS.position),
-      current,
-    );
-    const restored =
-      stored ?? positionToRatio(getDefaultWindowPosition(current), current);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setViewport(current);
-    setRatio(restored);
+    setRatio(positionToRatio(getDefaultWindowPosition(current), current));
     setOpen(localStorage.getItem(STORAGE_KEYS.open) === "true");
   }, []);
 
@@ -83,26 +81,12 @@ export function ChatWidget() {
     [viewport],
   );
 
-  const handleCommit = useCallback(
-    (next: WindowPosition) => {
-      if (!viewport) return;
-      // Persiste só no pointerup (fim do arraste), não a cada frame.
-      const saved = positionToRatio(next, viewport);
-      localStorage.setItem(
-        STORAGE_KEYS.position,
-        JSON.stringify({ v: 2, rx: saved.rx, ry: saved.ry }),
-      );
-    },
-    [viewport],
-  );
-
   const { isDragging, handleRef } = useDraggable({
     position: (viewport && ratio ? ratioToPosition(ratio, viewport) : null) ?? {
       x: 0,
       y: 0,
     },
     onPositionChange: handlePositionChange,
-    onCommit: handleCommit,
     bounds: {
       width: WINDOW_WIDTH,
       height:
@@ -144,11 +128,12 @@ export function ChatWidget() {
 
   // Badge derivado no render: mensagens do assistente que chegaram com a
   // janela fechada desde a última vez que foi vista (boas-vindas não conta).
+  const seen = lastSeen ?? loadedCount;
   const unreadCount =
-    open || messages.length <= lastSeen
+    open || messages.length <= seen
       ? 0
       : messages
-          .slice(lastSeen)
+          .slice(seen)
           .filter(
             (message) =>
               message.role === "assistant" &&
@@ -167,6 +152,11 @@ export function ChatWidget() {
     setLastSeen(messages.length);
     setOpen(false);
   }, [messages.length]);
+
+  const handleClear = useCallback(() => {
+    clearMessages();
+    setLastSeen(1);
+  }, [clearMessages]);
 
   // Esc fecha a janela (mesmo caminho do botão: marca como visto).
   useEffect(() => {
@@ -218,6 +208,7 @@ export function ChatWidget() {
         onRetry={retryLast}
         onMinimize={handleClose}
         onClose={handleClose}
+        onClear={handleClear}
       />
     </>
   );

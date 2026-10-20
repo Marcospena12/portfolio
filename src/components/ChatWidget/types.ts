@@ -2,6 +2,15 @@
 
 export type ChatRole = "user" | "assistant";
 
+/** Modelo que gerou uma resposta do assistente (exibido como pill no chat). */
+export type MessageModel = {
+  label: string;
+  /** Id bruto do modelo (ex.: `openai/gpt-oss-120b`), usado no tooltip. */
+  id?: string;
+  /** Provider que atendeu (ex.: `groq`). */
+  provider?: string;
+};
+
 export type Message = {
   id: string;
   role: ChatRole;
@@ -14,6 +23,8 @@ export type Message = {
    * (conteúdo já vem traduzido).
    */
   kind?: "welcome" | "error";
+  /** Só em respostas do assistente; ausente em welcome/erro. */
+  model?: MessageModel;
 };
 
 /** Estado do fluxo de conversa: `thinking` = aguardando a IA começar a
@@ -24,8 +35,9 @@ export type WindowPosition = { x: number; y: number };
 
 /**
  * Posição normalizada (0..1) dentro do espaço livre da viewport.
- * É a fonte da verdade persistida: ao redimensionar/zoom, a posição em pixels
+ * É a fonte da verdade em memória: ao redimensionar/zoom, a posição em pixels
  * é recalculada a partir do ratio, mantendo o chat no mesmo lugar proporcional.
+ * (Não é persistida: refresh volta à posição padrão.)
  */
 export type WindowRatio = { rx: number; ry: number };
 
@@ -34,7 +46,7 @@ export type Viewport = { width: number; height: number };
 /** Chaves de persistência no localStorage. */
 export const STORAGE_KEYS = {
   open: "chat.open",
-  position: "chat.pos",
+  messages: "chat.messages",
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -144,50 +156,4 @@ export function ratioToPosition(
     x: Math.round(ratio.rx * maxX),
     y: Math.round(ratio.ry * maxY),
   };
-}
-
-/**
- * Lê a posição salva. Formato novo: `{ v: 2, rx, ry }` (ratio).
- * Formato antigo: `{ x, y }` (pixels absolutos) — convertido para ratio
- * usando a viewport atual como aproximação.
- */
-export function parseStoredRatio(
-  raw: string | null,
-  viewport: Viewport,
-): WindowRatio | null {
-  if (!raw) return null;
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (typeof parsed !== "object" || parsed === null) return null;
-    const candidate = parsed as { rx?: unknown; ry?: unknown; x?: unknown; y?: unknown };
-
-    // Formato novo (ratio).
-    if (
-      typeof candidate.rx === "number" &&
-      Number.isFinite(candidate.rx) &&
-      typeof candidate.ry === "number" &&
-      Number.isFinite(candidate.ry)
-    ) {
-      return {
-        rx: clamp(candidate.rx, 0, 1),
-        ry: clamp(candidate.ry, 0, 1),
-      };
-    }
-
-    // Formato antigo (pixels absolutos).
-    if (
-      typeof candidate.x === "number" &&
-      Number.isFinite(candidate.x) &&
-      typeof candidate.y === "number" &&
-      Number.isFinite(candidate.y)
-    ) {
-      return positionToRatio(
-        { x: candidate.x, y: candidate.y },
-        viewport,
-      );
-    }
-  } catch {
-    // JSON inválido: ignora e volta pra posição default.
-  }
-  return null;
 }

@@ -24,6 +24,7 @@ type ChatWindowProps = {
   onRetry: (() => Promise<void>) | null;
   onMinimize: () => void;
   onClose: () => void;
+  onClear: () => void;
 };
 
 /** Janela de chat: animação scale+fade, arrastável pelo header. */
@@ -39,6 +40,7 @@ export function ChatWindow({
   onRetry,
   onMinimize,
   onClose,
+  onClear,
 }: ChatWindowProps) {
   const { t } = useLanguage();
   if (!open) return null;
@@ -69,7 +71,13 @@ export function ChatWindow({
       }`}
       style={style}
     >
-      <ChatHeader handleRef={handleRef} onMinimize={onMinimize} onClose={onClose} draggable={!isMobile} />
+      <ChatHeader
+        handleRef={handleRef}
+        onMinimize={onMinimize}
+        onClose={onClose}
+        onClear={onClear}
+        draggable={!isMobile}
+      />
       <ChatMessages messages={messages} isTyping={isTyping} onRetry={onRetry} />
       <ChatInput onSend={onSend} disabled={isTyping} />
     </div>

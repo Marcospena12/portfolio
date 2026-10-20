@@ -1,5 +1,5 @@
 import { createAgent } from "@/lib/agent/agent";
-import { getModelCandidates, isTransient } from "@/lib/agent/providers";
+import { getModelCandidates, getModelLabel, isTransient } from "@/lib/agent/providers";
 import type { NextRequest } from "next/server";
 
 const MAX_MESSAGES = 40;
@@ -10,7 +10,8 @@ const RATE_LIMIT_MAX = 20;
 // Timeout de cada chamada de IA. DevOps: o cliente do front aborta em 60s e
 // a Vercel Hobby aguenta 300s, então dá pra tentar vários providers seguidos.
 const REQUEST_TIMEOUT_MS = 25_000;
-type IncomingMessage = | { role: "user"; content: string }
+type IncomingMessage =
+  | { role: "user"; content: string }
   | { role: "assistant"; content: string };
 
 // Rate limit simples em memória (por instância do servidor).
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Requisição inválida." }, { status: 400 });
   }
 
-   const origin = request.headers.get("origin");
+  const origin = request.headers.get("origin");
   const candidates = getModelCandidates(origin);
   if (candidates.length === 0) {
     return Response.json(
@@ -83,6 +84,14 @@ export async function POST(request: NextRequest) {
       });
 
       const durationMs = Date.now() - startedAt;
+      const lastStep = result.steps[result.steps.length - 1];
+      const model = lastStep
+        ? {
+            label: getModelLabel(lastStep.model.modelId),
+            id: lastStep.model.modelId,
+            provider: candidate.provider,
+          }
+        : undefined;
       const toolCalls = result.steps.flatMap((step) =>
         step.toolCalls.map((call) => ({
           tool: call.toolName,
@@ -116,7 +125,10 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      return Response.json({ message: { role: "assistant", content: result.text } });
+      return Response.json({
+        message: { role: "assistant", content: result.text },
+        ...(model ? { model } : {}),
+      });
     } catch (error) {
       anyTransient = anyTransient || isTransient(error);
       console.error(
