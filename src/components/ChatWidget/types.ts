@@ -49,6 +49,8 @@ export const STORAGE_KEYS = {
   messages: "chat.messages",
 } as const;
 
+export const OPEN_CHAT_EVENT = "ciri:open-chat";
+
 // ---------------------------------------------------------------------------
 // Geometria do widget (fonte única de verdade: janela, launcher e drag usam
 // as mesmas contas para nunca divergirem)

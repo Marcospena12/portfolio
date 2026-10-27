@@ -64,7 +64,7 @@ export function Header() {
         Home
       </Link>
 
-      <nav className="flex items-center gap-2">
+      <nav data-hint="nav" className="flex items-center gap-2">
         {menuLinks.map((link) => {
           const isActive = isActivePath(pathname, link.href);
           return (

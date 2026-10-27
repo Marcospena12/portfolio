@@ -7,6 +7,7 @@ import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { BackgroundAurora } from "@/components/BackgroundAurora";
 import { BackgroundPhoto } from "@/components/BackgroundPhoto";
 import { ChatWidget } from "@/components/ChatWidget";
+import { Hints } from "@/components/Hints/Hints";
 import { VisitNotifier } from "@/components/VisitNotifier";
 import {
   SITE_DESCRIPTION,
@@ -84,6 +85,7 @@ export default function RootLayout({
               <div className="relative z-10 flex flex-1 flex-col">{children}</div>
             </div>
             <ChatWidget />
+            <Hints />
             <VisitNotifier />
           </LanguageProvider>
         </ThemeProvider>

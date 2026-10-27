@@ -10,6 +10,7 @@ import {
   WINDOW_BOTTOM_SPACE,
   WINDOW_WIDTH,
   STORAGE_KEYS,
+  OPEN_CHAT_EVENT,
   getDefaultWindowPosition,
   getLauncherPosition,
   getWindowHeight,
@@ -157,6 +158,16 @@ export function ChatWidget() {
     clearMessages();
     setLastSeen(1);
   }, [clearMessages]);
+
+  useEffect(() => {
+    function handleOpenEvent() {
+      setLastSeen(messages.length);
+      setOpen(true);
+    }
+
+    window.addEventListener(OPEN_CHAT_EVENT, handleOpenEvent);
+    return () => window.removeEventListener(OPEN_CHAT_EVENT, handleOpenEvent);
+  }, [messages.length]);
 
   // Esc fecha a janela (mesmo caminho do botão: marca como visto).
   useEffect(() => {

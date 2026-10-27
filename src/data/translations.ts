@@ -45,6 +45,22 @@ export const translations = {
       error:
         "Não consegui responder agora. Verifique sua conexão e tente novamente.",
     },
+    hints: {
+      nav: {
+        title: "Explore o portfólio",
+        description:
+          "Acesse meus projetos, as tecnologias que já tive contato e meus contatos aqui no topo.",
+        next: "Próxima dica",
+      },
+      ciri: {
+        title: "Prefere perguntar?",
+        description:
+          "A Ciri conhece meus projetos, stack e contato. Mande sua pergunta por aqui.",
+        cta: "Conversar agora",
+      },
+      dismiss: "Entendi",
+      close: "Fechar dica",
+    },
     sobre: {
       paragraphs: [ "Nasci em 2001, mas minha história com computadores começou bem antes de eu escolher isso como profissão. Desde 2007, tenho contato praticamente diário com computadores. Montar PC'S virou quase um hobby anual, e entre 2008 e 2012 passei boa parte do tempo em fóruns de tecnologia, absorvendo tudo que podia sobre o assunto.",
         "Estudei em escola pública e em 2023/2024, entrei na faculdade de Sistemas de Informação na PUC Minas, decisão natural depois de tantos anos de curiosidade acumulada.",
@@ -97,6 +113,22 @@ export const translations = {
       answeredBy: "Answered by",
       busy: "The AI is experiencing high demand right now. Try again in a moment. I've already sent an alert to Marcos — he'll sort this out soon.",
       error: "I couldn't reply right now. Check your connection and try again.",
+    },
+    hints: {
+      nav: {
+        title: "Explore the portfolio",
+        description:
+          "Browse my projects, the technologies I've worked with and my contact info up here.",
+        next: "Next tip",
+      },
+      ciri: {
+        title: "Rather ask?",
+        description:
+          "Ciri knows my projects, stack and contact info. Send your question right here.",
+        cta: "Chat now",
+      },
+      dismiss: "Got it",
+      close: "Close tip",
     },
     sobre: {
       paragraphs: [ "I was born in 2001, but my story with computers started long before I chose it as a career. I've had daily contact with machines since 2007. Building computers became almost an annual hobby, and between 2008 and 2012 I spent a good chunk of my time on tech forums, soaking up everything I could on the subject.",

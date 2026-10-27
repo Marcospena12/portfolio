@@ -42,7 +42,7 @@ export const projects: Project[] = [
       pt: "Sistema multiagente hierárquico construído no n8n para automatizar o suporte via Crisp, roteando cada conversa ao especialista certo. Resolve 70% das ~700 conversas mensais de forma totalmente autônoma e HUMANIZADA.",
       en: "Hierarchical multi-agent system built on n8n to automate support via Crisp, routing each conversation to the right specialist. Resolves 70% of the ~700 monthly conversations fully autonomously, in a human way.",
     },
-    techIds: ["n8n", "javascript", "postgresql", "redis", "slack", "metabase"],
+    techIds: ["n8n", "javascript", "postgresql", "redis", "slack", "metabase", "python"],
     type: "trabalho",
     details: {
       architecture: {
@@ -691,7 +691,7 @@ export const projects: Project[] = [
       pt: "Cada issue aberta no GitLab dispara um ecossistema de 25 automações que cuidam do board, do review e do deploy, mantendo o time informado no Slack sem ninguém precisar cobrar.",
       en: "Every issue opened on GitLab triggers an ecosystem of 25 automations that take care of the board, review and deploy, keeping the team informed on Slack with nobody having to chase anyone.",
     },
-    techIds: ["n8n", "gitlab", "slack", "javascript"],
+    techIds: ["n8n", "gitlab", "slack", "javascript", "python"],
     type: "trabalho",
     details: {
       architecture: {

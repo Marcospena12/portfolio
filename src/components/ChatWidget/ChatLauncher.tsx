@@ -29,6 +29,7 @@ export function ChatLauncher({
     <button
       type="button"
       onClick={onToggle}
+      data-hint="chat"
       aria-label={open ? t.chat.close : t.chat.open}
       aria-expanded={open}
       aria-haspopup="dialog"
