@@ -11,6 +11,16 @@ export const translations = {
       greeting: "Olá, eu sou o Marcos",
       description:
         "Construo soluções e automações, unindo experiência em DevOps com desenvolvimento web moderno.",
+      featured: {
+        eyebrow: "Projetos em destaque",
+        title: "Conheça mais dos projetos que trabalhei",
+        viewAll: "Ver todos os projetos",
+        scopes: {
+          software: "Software",
+          ai: "IA & Automação",
+          infra: "Infraestrutura",
+        },
+      },
     },
     marquee: {
       label: "Eu sei um pouco disso",
@@ -81,6 +91,16 @@ export const translations = {
       greeting: "Hi, I'm Marcos",
       description:
         "I build solutions and automations, combining DevOps experience with modern web development.",
+      featured: {
+        eyebrow: "Featured work",
+        title: "Get to know the projects I've been working on",
+        viewAll: "View all projects",
+        scopes: {
+          software: "Software",
+          ai: "AI & Automation",
+          infra: "Infrastructure",
+        },
+      },
     },
     marquee: {
       label: "I know a little about that",

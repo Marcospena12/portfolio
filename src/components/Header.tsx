@@ -51,7 +51,10 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <header ref={headerRef} className="relative z-10 flex items-center justify-between px-8 py-6">
+    <header
+      ref={headerRef}
+      className="relative z-10 flex flex-col items-center gap-3 px-4 py-4 md:flex-row md:justify-between md:px-8 md:py-6"
+    >
       <Link
         href="/"
         data-active={isActivePath(pathname, "/")}
@@ -64,7 +67,10 @@ export function Header() {
         Home
       </Link>
 
-      <nav data-hint="nav" className="flex items-center gap-2">
+      <nav
+        data-hint="nav"
+        className="flex w-full flex-wrap items-center justify-center gap-1 md:w-auto md:flex-nowrap md:justify-end md:gap-2"
+      >
         {menuLinks.map((link) => {
           const isActive = isActivePath(pathname, link.href);
           return (
@@ -72,7 +78,7 @@ export function Header() {
               key={link.href}
               href={link.href}
               data-active={isActive}
-              className={`rounded-full px-6 py-3 text-base font-medium transition-colors duration-150 ${
+              className={`rounded-full px-3 py-2 text-sm font-medium transition-colors duration-150 sm:px-5 sm:py-2.5 md:px-6 md:py-3 md:text-base ${
                 isActive ? "text-foreground" : "text-foreground/70 hover:text-foreground"
               }`}
             >
@@ -85,7 +91,7 @@ export function Header() {
         {indicator && (
           <span
             aria-hidden="true"
-            className="absolute bottom-5 h-[2px] rounded-full bg-foreground/80 transition-[left,width] duration-300 ease-out"
+            className="absolute bottom-5 hidden h-[2px] rounded-full bg-foreground/80 transition-[left,width] duration-300 ease-out md:block"
             style={{ left: indicator.left, width: indicator.width }}
           />
         )}

@@ -27,6 +27,7 @@ export type ProjectDetails = {
 export type Project = {
   id: string;
   title: Localized;
+  shortTitle?: Localized;
   description: Localized;
   techIds: string[];
   type: "trabalho" | "pessoal";
@@ -38,6 +39,7 @@ export const projects: Project[] = [
   {
     id: "super-agente",
     title: { pt: "Super-Agente de IA para Suporte", en: "AI Super Agent for Support" },
+    shortTitle: { pt: "Super-Agente de IA", en: "AI Super Agent" },
     description: {
       pt: "Sistema multiagente hierárquico construído no n8n para automatizar o suporte via Crisp, roteando cada conversa ao especialista certo. Resolve 70% das ~700 conversas mensais de forma totalmente autônoma e HUMANIZADA.",
       en: "Hierarchical multi-agent system built on n8n to automate support via Crisp, routing each conversation to the right specialist. Resolves 70% of the ~700 monthly conversations fully autonomously, in a human way.",
@@ -166,6 +168,7 @@ export const projects: Project[] = [
       pt: "Nó verificado do n8n para Notificações Inteligentes",
       en: "Verified n8n Node for Notificações Inteligentes",
     },
+    shortTitle: { pt: "Nó n8n verificado", en: "Verified n8n Node" },
     description: {
       pt: "Nó oficialmente verificado pelo n8n que transforma a API da Notificações Inteligentes em blocos visuais nativos: permitindo criar, editar, buscar e gerenciar leads e integrações sem escrever código.",
       en: "Officially verified n8n node that turns the Notificações Inteligentes API into native visual blocks: letting you create, edit, search and manage leads and integrations without writing code.",
@@ -960,6 +963,7 @@ export const projects: Project[] = [
       pt: "Infraestrutura de Armazenamento e Backup (Synology RS820+)",
       en: "Storage and Backup Infrastructure (Synology RS820+)",
     },
+    shortTitle: { pt: "Armazenamento e Backup (NAS)", en: "Storage & Backup (NAS)" },
     description: {
       pt: "NAS Synology RS820+ com 4 HDs em RAID 5 que centraliza o armazenamento do ecossistema da GPM (gravações de 20+ câmeras por 45 dias, backups locais de todas as VMs, quórum do cluster Proxmox e retenção automatizada), tudo configurado do zero a partir de um equipamento que estava parado.",
       en: "A Synology RS820+ NAS with 4 HDDs in RAID 5 that centralizes storage for the GPM ecosystem (recordings from 20+ cameras for 45 days, local backups of every VM, Proxmox cluster quorum and automated retention), all configured from scratch starting from a machine that was sitting idle.",
