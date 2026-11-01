@@ -2,8 +2,8 @@ import { T } from "@/components/T";
 import type { Localized } from "@/data/translations";
 
 type MetricCardProps = {
-  value: Localized;
-  label: Localized;
+  value: Localized | string;
+  label: Localized | string;
   className?: string;
   size?: "sm" | "md" | "lg";
 };
@@ -20,10 +20,10 @@ export function MetricCard({ value, label, className = "", size = "md" }: Metric
   return (
     <div className={`led-border rounded-xl bg-background/80 ${s.padding} text-center backdrop-blur-sm ${className}`}>
       <p className={`${s.value} font-bold`}>
-        <T value={value} />
+        {typeof value === "string" ? value : <T value={value} />}
       </p>
       <p className={`mt-1 ${s.label} text-foreground/50`}>
-        <T value={label} />
+        {typeof label === "string" ? label : <T value={label} />}
       </p>
     </div>
   );

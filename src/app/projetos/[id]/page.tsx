@@ -16,6 +16,7 @@ import { KnowledgePipeline } from "@/components/KnowledgePipeline";
 import { HandoffFanout } from "@/components/HandoffFanout";
 import { NasRaidStack } from "@/components/NasRaidStack";
 import { PbsLayers } from "@/components/PbsLayers";
+import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
 
 
 type PageProps = {
@@ -67,12 +68,51 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       {details && <ScrollHint />}
 
       <div className="mx-auto max-w-3xl">
+        {project.subtitle && (
+          <p className="mb-2 text-xs font-semibold tracking-widest text-foreground/60 uppercase">
+            <T value={project.subtitle} />
+          </p>
+        )}
         <h1 className="gradient-text mb-4 text-4xl font-bold">
           <T value={project.title} />
         </h1>
-        <p className="mb-10 text-foreground/70">
+        <p className="mb-8 text-foreground/70">
           <T value={project.description} />
         </p>
+
+        {details?.info && details.info.length > 0 && (
+          <div className="mb-8 flex flex-wrap gap-2 text-xs">
+            {details.info.map((item) => (
+              <span
+                key={item.label.pt}
+                className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-foreground/[0.03] px-3 py-1 text-foreground/60"
+              >
+                <span className="font-medium text-foreground/80">
+                  <T value={item.label} />
+                </span>
+                <span>
+                  <T value={item.value} />
+                </span>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {details?.links && details.links.length > 0 && (
+          <div className="mb-12 flex flex-wrap gap-3">
+            {details.links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-foreground/20 px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:border-foreground/50 hover:text-foreground"
+              >
+                <T value={link.label} /> &rarr;
+              </a>
+            ))}
+          </div>
+        )}
 
         {details && (
           <div className="mb-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -85,6 +125,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
       {details && (
         <>
+          {details.screenshots && details.screenshots.length > 0 && (
+            <ScreenshotCarousel screenshots={details.screenshots} />
+          )}
+
           {details.visual?.kind === "agent-map" && (
             <AgentMap nodes={details.visual.nodes} />
           )}

@@ -23,6 +23,7 @@ export function Header() {
   const menuLinks = [
     { href: "/tecnologias", label: t.nav.tecnologias },
     { href: "/projetos", label: t.nav.projetos },
+    { href: "/cursos", label: t.nav.cursos },
     { href: "/sobre", label: t.nav.sobre },
     { href: "/contato", label: t.nav.contato },
   ];
@@ -78,7 +79,7 @@ export function Header() {
               key={link.href}
               href={link.href}
               data-active={isActive}
-              className={`rounded-full px-3 py-2 text-sm font-medium transition-colors duration-150 sm:px-5 sm:py-2.5 md:px-6 md:py-3 md:text-base ${
+              className={`rounded-full px-2.5 py-1.5 text-xs font-medium transition-colors duration-150 sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base ${
                 isActive ? "text-foreground" : "text-foreground/70 hover:text-foreground"
               }`}
             >

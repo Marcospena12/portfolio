@@ -144,6 +144,56 @@ body::before {
     animation: led-breathe 3s ease-in-out infinite;
     pointer-events: none;
   }
+
+  .emblem-3d-wrapper {
+    perspective: 800px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .emblem-3d-object {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .emblem-animate-spin {
+    animation: emblem-spin 10s linear infinite;
+  }
+
+  .emblem-animate-sway {
+    animation: emblem-sway 6s ease-in-out infinite;
+  }
+
+  .emblem-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .emblem-face-back {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes emblem-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@keyframes emblem-sway {
+  0%, 100% {
+    transform: rotateY(-35deg) rotateX(6deg);
+  }
+  50% {
+    transform: rotateY(35deg) rotateX(-6deg);
+  }
 }
 
 @keyframes led-breathe {
@@ -234,6 +284,7 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin, .orbit-counter { animation: none !important; }
   .flow-dot, .flow-buzz { animation: none !important; }
+  .emblem-animate-spin, .emblem-animate-sway { animation: none !important; }
   .aurora-blob {
     animation: none !important;
   }

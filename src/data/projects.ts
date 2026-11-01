@@ -14,6 +14,11 @@ export type ProjectVisual =
   | { kind: "nas-raid-stack" }
   | { kind: "pbs-layers" };
 
+export type ProjectScreenshot = {
+  src: string;
+  alt: Localized;
+};
+
 export type ProjectDetails = {
   architecture: Localized;
   stack: Localized[];
@@ -21,6 +26,9 @@ export type ProjectDetails = {
   agentCategories?: { label: Localized; items: Localized[] }[];
   differentials: Localized[];
   metrics: { label: Localized; value: Localized }[];
+  info?: { label: Localized; value: Localized }[];
+  links?: { label: Localized; href: string }[];
+  screenshots?: ProjectScreenshot[];
   visual?: ProjectVisual;
 };
 
@@ -28,6 +36,7 @@ export type Project = {
   id: string;
   title: Localized;
   shortTitle?: Localized;
+  subtitle?: Localized;
   description: Localized;
   techIds: string[];
   type: "trabalho" | "pessoal";
@@ -684,6 +693,122 @@ export const projects: Project[] = [
         size: 90,
         duration: 18,
       },
+    },
+  },
+
+  {
+    id: "free-games-hub",
+    title: { pt: "Free Games Hub", en: "Free Games Hub" },
+    subtitle: {
+      pt: "Central desktop de jogos gratuitos",
+      en: "Desktop hub for free games",
+    },
+    description: {
+      pt: "Aplicativo desktop em Python/PySide6 que monitora jogos gratuitos em feeds RSS da Steam e na API GamerPower. Valida ofertas, remove duplicatas e notifica o usuário, mantendo todo o histórico localmente.",
+      en: "A desktop app built with Python/PySide6 that monitors free games in Steam RSS feeds and the GamerPower API. It validates offers, removes duplicates and notifies the user while keeping the entire history locally.",
+    },
+    techIds: ["python", "qt", "sqlite", "git", "pytest", "githubactions"],
+    type: "pessoal",
+    link: "https://github.com/Marcospena12/free-games-alert",
+    details: {
+      architecture: {
+        pt: "O Free Games Hub nasceu da fragmentação das ofertas gratuitas: os giveaways ficam espalhados entre grupos da Steam e 19 lojas/plataformas, cada uma com um formato diferente. Em vez de depender de uma única fonte, o aplicativo combina dois canais: os feeds RSS dos grupos Steam [FREE] e a API GamerPower. A coleta roda em segundo plano e cada oferta passa por validação e deduplicação antes de entrar no histórico local em SQLite. A deduplicação usa ID canônico ou uma chave composta de loja/título, evitando que o mesmo jogo apareça várias vezes quando chega por fontes diferentes. Quando possível, o preço é conferido na própria Steam e a oferta é classificada como Grátis, Expirado, F2P ou Não verificado. O painel desktop em PySide6/Qt reúne métricas, cards/lista e ações rápidas, com filtros por loja, tipo de oferta, prazo e palavras-chave. A aplicação funciona na bandeja do sistema, com execução em segundo plano, notificações nativas e autostart no Windows. Não há backend, conta ou nuvem: todo o estado fica no SQLite local, e os dados de terceiros são atribuídos ao GamerPower.",
+        en: "Free Games Hub was born from the fragmentation of free offers: giveaways are spread across Steam groups and 19 stores/platforms, each with a different format. Instead of relying on a single source, the app combines two channels: RSS feeds from Steam [FREE] groups and the GamerPower API. Collection runs in the background and every offer goes through validation and deduplication before entering the local SQLite history. Deduplication uses a canonical ID or a composite store/title key, preventing the same game from appearing multiple times when it arrives from different sources. When possible, the price is checked directly on Steam and the offer is classified as Free, Expired, F2P or Unverified. The PySide6/Qt desktop dashboard brings together metrics, cards/list and quick actions, with filters by store, offer type, deadline and keywords. The app lives in the system tray, with background execution, native notifications and autostart on Windows. There is no backend, account or cloud: all state stays in local SQLite, and third-party data is attributed to GamerPower.",
+      },
+      stack: [
+        { pt: "Linguagem e interface: Python 3.12+ com PySide6/Qt", en: "Language and UI: Python 3.12+ with PySide6/Qt" },
+        { pt: "Fontes de dados: feeds RSS de grupos Steam [FREE] e API GamerPower (dados via GamerPower.com)", en: "Data sources: RSS feeds from Steam [FREE] groups and the GamerPower API (data via GamerPower.com)" },
+        { pt: "Coleta e parsing: feedparser", en: "Collection and parsing: feedparser" },
+        { pt: "Persistência: SQLite, com histórico e estado totalmente locais", en: "Persistence: SQLite, with fully local history and state" },
+        { pt: "Notificações e sistema: desktop-notifier, bandeja, execução em segundo plano e autostart no Windows", en: "Notifications and system: desktop-notifier, system tray, background execution and autostart on Windows" },
+        { pt: "Qualidade: pytest", en: "Quality: pytest" },
+        { pt: "Distribuição: PyInstaller para o executável e Inno Setup para o instalador", en: "Distribution: PyInstaller for the executable and Inno Setup for the installer" },
+        { pt: "CI/CD: GitHub Actions", en: "CI/CD: GitHub Actions" },
+      ],
+      categoriesTitle: { pt: "Funcionalidades", en: "Features" },
+      agentCategories: [
+        {
+          label: { pt: "Fontes e coleta", en: "Sources and collection" },
+          items: [
+            { pt: "Feeds RSS dos grupos Steam [FREE]", en: "RSS feeds from Steam [FREE] groups" },
+            { pt: "API GamerPower como segunda fonte de ofertas", en: "The GamerPower API as a second source of offers" },
+            { pt: "19 lojas/plataformas mapeadas, incluindo Steam, Epic, GOG, Itch.io, Ubisoft, Battle.net, EA, Prime Gaming, consoles e mobile", en: "19 mapped stores/platforms, including Steam, Epic, GOG, Itch.io, Ubisoft, Battle.net, EA, Prime Gaming, consoles and mobile" },
+            { pt: "Atualização em segundo plano, sem interromper o uso do aplicativo", en: "Background updates without interrupting app usage" },
+          ],
+        },
+        {
+          label: { pt: "Validação e deduplicação", en: "Validation and deduplication" },
+          items: [
+            { pt: "Validação de preço na Steam: Grátis, Expirado, F2P ou Não verificado", en: "Steam price validation: Free, Expired, F2P or Unverified" },
+            { pt: "Confirmação da validade da oferta na Steam quando possível", en: "Confirmation of offer validity on Steam when possible" },
+            { pt: "Deduplicação por ID canônico ou chave loja/título", en: "Deduplication by canonical ID or store/title key" },
+          ],
+        },
+        {
+          label: { pt: "Painel e histórico", en: "Dashboard and history" },
+          items: [
+            { pt: "Painel com métricas, cards/lista e ações rápidas", en: "Dashboard with metrics, cards/list and quick actions" },
+            { pt: "Histórico com filtros por status e loja", en: "History with filters by status and store" },
+            { pt: "Marcação de jogos resgatados", en: "Marking games as redeemed" },
+            { pt: "Filtros avançados por loja, tipo de oferta, prazo e palavras-chave", en: "Advanced filters by store, offer type, deadline and keywords" },
+          ],
+        },
+        {
+          label: { pt: "Sistema e automação", en: "System and automation" },
+          items: [
+            { pt: "Notificações nativas quando uma oferta relevante aparece", en: "Native notifications when a relevant offer appears" },
+            { pt: "Bandeja do sistema e execução em segundo plano", en: "System tray and background execution" },
+            { pt: "Autostart no Windows", en: "Autostart on Windows" },
+            { pt: "Histórico local em SQLite, sem nuvem, conta ou serviços pagos", en: "Local history in SQLite, with no cloud, account or paid services" },
+          ],
+        },
+      ],
+      differentials: [
+        {
+          pt: "19 lojas/plataformas mapeadas em um único painel, de lojas de PC a consoles e mobile",
+          en: "19 stores/platforms mapped in a single dashboard, from PC stores to consoles and mobile",
+        },
+        {
+          pt: "Duas fontes complementares: RSS dos grupos Steam e API GamerPower, reduzindo pontos cegos na coleta",
+          en: "Two complementary sources: Steam group RSS and the GamerPower API, reducing blind spots in collection",
+        },
+        {
+          pt: "Validação de preço na Steam com quatro estados explícitos, em vez de confiar cegamente na oferta recebida",
+          en: "Steam price validation with four explicit states, instead of blindly trusting the incoming offer",
+        },
+        {
+          pt: "Deduplicação por ID canônico ou chave loja/título, evitando repetições entre fontes diferentes",
+          en: "Deduplication by canonical ID or store/title key, preventing duplicates across different sources",
+        },
+        {
+          pt: "Local-first: histórico em SQLite, sem nuvem, sem conta e sem serviços pagos",
+          en: "Local-first: history in SQLite, with no cloud, no account and no paid services",
+        },
+        {
+          pt: "Integração com o Windows: bandeja, execução em segundo plano, autostart e notificações nativas",
+          en: "Windows integration: system tray, background execution, autostart and native notifications",
+        },
+      ],
+      metrics: [
+        { label: { pt: "Lojas/plataformas", en: "Stores/platforms" }, value: { pt: "19", en: "19" } },
+        { label: { pt: "Fontes de dados", en: "Data sources" }, value: { pt: "2", en: "2" } },
+        { label: { pt: "Estados de validação", en: "Validation states" }, value: { pt: "4", en: "4" } },
+        { label: { pt: "Versão", en: "Version" }, value: { pt: "0.2.0", en: "0.2.0" } },
+      ],
+      info: [
+        { label: { pt: "Ano", en: "Year" }, value: { pt: "2026", en: "2026" } },
+        { label: { pt: "Versão", en: "Version" }, value: { pt: "0.2.0", en: "0.2.0" } },
+        { label: { pt: "Categoria", en: "Category" }, value: { pt: "Aplicação desktop", en: "Desktop application" } },
+        { label: { pt: "Papel", en: "Role" }, value: { pt: "Desenvolvedor solo", en: "Solo developer" } },
+        { label: { pt: "Status", en: "Status" }, value: { pt: "Publicado / em evolução", en: "Published / evolving" } },
+        { label: { pt: "Licença", en: "License" }, value: { pt: "MIT", en: "MIT" } },
+      ],
+      links: [
+        { label: { pt: "Código", en: "Code" }, href: "https://github.com/Marcospena12/free-games-alert" },
+        { label: { pt: "Download", en: "Download" }, href: "https://github.com/Marcospena12/free-games-alert/releases/latest" },
+        { label: { pt: "Dados via GamerPower", en: "Data via GamerPower" }, href: "https://www.gamerpower.com" },
+      ],
+      screenshots: [],
     },
   },
 

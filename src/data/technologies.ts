@@ -195,5 +195,33 @@ export const technologies: Technology[] = [
   summary: "Framework de estilos utilitário para interfaces consistentes.",
   icon: "SiTailwindcss",
   color: "#06B6D4",
+},
+{
+  id: "qt",
+  name: "PySide6 / Qt",
+  summary: "Interfaces desktop nativas com Python e o framework Qt.",
+  icon: "SiQt",
+  color: "#41CD52",
+},
+{
+  id: "sqlite",
+  name: "SQLite",
+  summary: "Banco de dados local, leve e sem servidor para aplicações desktop.",
+  icon: "SiSqlite",
+  color: "#003B57",
+},
+{
+  id: "pytest",
+  name: "pytest",
+  summary: "Testes automatizados para projetos em Python.",
+  icon: "SiPytest",
+  color: "#0A9EDC",
+},
+{
+  id: "githubactions",
+  name: "GitHub Actions",
+  summary: "Automação de testes e builds em pipelines de CI/CD.",
+  icon: "SiGithubactions",
+  color: "#2088FF",
 }
 ];
