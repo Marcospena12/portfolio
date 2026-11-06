@@ -46,6 +46,113 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "steamshotbridge",
+    title: { pt: "SteamShotBridge", en: "SteamShotBridge" },
+    shortTitle: { pt: "SteamShotBridge", en: "SteamShotBridge" },
+    subtitle: {
+      pt: "Sincronizador desktop de capturas para a Steam",
+      en: "Desktop screenshot synchronizer for Steam",
+    },
+    description: {
+      pt: "Aplicativo desktop em Python e PySide6 para importação e sincronização de capturas de tela externas na biblioteca da Steam, com escrita atômica em arquivos VDF e fila persistente não destrutiva.",
+      en: "A Python and PySide6 desktop application to import and sync external screenshots into Steam's library, featuring atomic VDF file writes and a non-destructive persistent queue.",
+    },
+    techIds: ["python", "qt", "pytest", "githubactions", "git"],
+    type: "pessoal",
+    link: "https://github.com/Marcospena12/steam-screenshot-importer",
+    details: {
+      architecture: {
+        pt: "O SteamShotBridge foi desenvolvido para resolver a barreira de importar capturas de jogos não-Steam ou externos para a biblioteca oficial da Steam, contornando a complexidade dos arquivos binários e textuais VDF (shortcuts.vdf e screenshots.vdf) e os riscos de corrupção caso a Steam esteja aberta. A arquitetura adota um modelo local-first com escrita atômica (gravação em arquivo temporário seguida de substituição atômica) e criação prévia de backups datados (.bak_YYYYMMDD_HHMMSS). Quando o cliente Steam está em execução (detectado via psutil), as operações de importação e renomeação são enfileiradas em uma estrutura de pendências não destrutiva, sendo aplicadas automaticamente ou com um clique assim que a Steam é finalizada. A detecção de novos arquivos utiliza o watchdog com janela de estabilização para evitar ler capturas incompletas, e a resolução de títulos de jogos combina extração de metadados Win32 VersionInfo do executável, títulos de janelas ativas e estrutura de diretórios pai.",
+        en: "SteamShotBridge was built to overcome the friction of importing screenshots from non-Steam and external games into Steam's official library, abstracting the complexity of binary and text VDF files (shortcuts.vdf and screenshots.vdf) and avoiding corruption risks when Steam is active. The architecture follows a local-first pattern with atomic writes (temporary file generation followed by atomic replacement) and prior creation of timestamped backups (.bak_YYYYMMDD_HHMMSS). When the Steam client is running (detected via psutil), import and rename operations are enqueued in a non-destructive pending state, safely applied either automatically or with one click once Steam shuts down. New file detection is handled via watchdog with a stabilization window to avoid reading incomplete captures, while game title resolution combines Win32 VersionInfo metadata, active window titles, and parent directory hierarchies.",
+      },
+      stack: [
+        { pt: "Linguagem e interface: Python 3.11+ com PySide6 / Qt (temas Claro e Escuro)", en: "Language and UI: Python 3.11+ with PySide6 / Qt (Light and Dark themes)" },
+        { pt: "Manipulação de dados Steam: serialização e parsing de arquivos Valve Data Format (VDF) textuais e binários", en: "Steam data handling: serialization and parsing of Valve Data Format (VDF) text and binary files" },
+        { pt: "Processamento de imagem: Pillow para geração de miniaturas de 200px e conversão JPEG otimizada", en: "Image processing: Pillow for 200px thumbnail generation and optimized JPEG conversion" },
+        { pt: "Monitoramento do sistema: watchdog para observação de pastas de capturas em tempo real com intervalo de estabilização de 0,5s", en: "System monitoring: watchdog for real-time capture folder observation with 0.5s stabilization window" },
+        { pt: "Controle de processos: psutil para detecção do ciclo de vida do cliente Steam e threads de sincronização", en: "Process control: psutil for Steam client lifecycle detection and background sync threads" },
+        { pt: "Confiabilidade e integridade: backups automáticos com carimbo de data/hora e substituição atômica de arquivos", en: "Reliability and integrity: automatic timestamped backups and atomic filesystem file replacement" },
+        { pt: "Qualidade e testes: pytest com suíte abrangente de 197 testes automatizados cobrindo VDF, UI, concorrência e mocks", en: "Quality and testing: pytest with a comprehensive suite of 197 automated tests covering VDF, UI, concurrency, and mocks" },
+        { pt: "Distribuição: PyInstaller para binário autônomo e Inno Setup para instalador Windows (.exe)", en: "Distribution: PyInstaller for standalone binary and Inno Setup for Windows installer (.exe)" },
+        { pt: "CI/CD: GitHub Actions para testes automatizados, compilação de binários e geração de releases", en: "CI/CD: GitHub Actions for automated testing, binary compilation, and release packaging" },
+      ],
+      categoriesTitle: { pt: "Como funciona", en: "How it works" },
+      agentCategories: [
+        {
+          label: { pt: "Importação e formatos", en: "Import and formats" },
+          items: [
+            { pt: "Cálculo determinístico de AppID e GameID segundo o algoritmo oficial da Steam", en: "Deterministic AppID and GameID calculation following Steam's official algorithm" },
+            { pt: "Conversão transparente de imagens externas (PNG, BMP, JPG) para o formato nativo da Steam", en: "Transparent conversion of external captures (PNG, BMP, JPG) to Steam's native format" },
+            { pt: "Geração de miniaturas de 200px com proporção preservada", en: "Generation of 200px thumbnails with preserved aspect ratio" },
+            { pt: "Associação e inserção automática em shortcuts.vdf e screenshots.vdf", en: "Automatic association and insertion into shortcuts.vdf and screenshots.vdf" },
+          ],
+        },
+        {
+          label: { pt: "Integridade e fila segura", en: "Data integrity and safe queue" },
+          items: [
+            { pt: "Detecção em tempo real do status de execução da Steam via psutil", en: "Real-time Steam execution status detection via psutil" },
+            { pt: "Fila de pendências persistente quando a Steam estiver aberta, evitando sobrescritas acidentais", en: "Persistent pending queue while Steam is open, preventing accidental overwrites" },
+            { pt: "Aplicação atômica e em lote das pendências assim que a Steam for fechada", en: "Atomic and batch application of pending changes once Steam closes" },
+            { pt: "Backup automático com timestamp (.bak_YYYYMMDD_HHMMSS) antes de qualquer mutação", en: "Automatic timestamped backup (.bak_YYYYMMDD_HHMMSS) prior to any mutation" },
+          ],
+        },
+        {
+          label: { pt: "Identificação e automação", en: "Identification and automation" },
+          items: [
+            { pt: "Resolução inteligente de títulos de jogos via Win32 VersionInfo, janela ativa e caminhos", en: "Intelligent game title resolution via Win32 VersionInfo, active window, and folder paths" },
+            { pt: "Renomeação consistente em todas as origens (atalhos, exe_map e blocos órfãos)", en: "Consistent renaming across all sources (shortcuts, exe_map, and orphan blocks)" },
+            { pt: "Monitoramento contínuo de pastas configuradas com debounce de gravação", en: "Continuous monitoring of configured folders with write debounce" },
+            { pt: "Operação silenciosa na bandeja do sistema (System Tray) e inicialização com o Windows", en: "Silent system tray operation and Windows autostart integration" },
+          ],
+        },
+      ],
+      differentials: [
+        {
+          pt: "Fila de pendências não destrutiva que previne perda de dados caso a Steam esteja rodando durante a importação",
+          en: "Non-destructive pending queue that prevents data loss if Steam is active during import",
+        },
+        {
+          pt: "Backups com carimbo de data/hora e substituição atômica no sistema de arquivos para tolerância total a falhas",
+          en: "Timestamped backups and atomic filesystem replacement for full fault tolerance",
+        },
+        {
+          pt: "Resolução inteligente de nomes com três níveis de fallback (metadados do executável, janela ativa e diretório)",
+          en: "Smart name resolution with three fallback levels (executable metadata, active window, and directory)",
+        },
+        {
+          pt: "Suporte completo a jogos externos e atalhos customizados, integrando-os como se fossem jogos nativos da Steam",
+          en: "Full support for external games and custom shortcuts, seamlessly integrating them into native Steam",
+        },
+        {
+          pt: "Arquitetura 100% local e privada, sem telemetria, dependência de nuvem ou chaves de terceiros",
+          en: "100% local and private architecture, with zero telemetry, cloud dependency, or third-party keys",
+        },
+        {
+          pt: "Suíte com 197 testes automatizados cobrindo regras de negócio, serialização VDF, concorrência e UI",
+          en: "Suite of 197 automated tests covering business logic, VDF serialization, concurrency, and UI",
+        },
+      ],
+      metrics: [
+        { label: { pt: "Simples e fácil", en: "Clean visual" }, value: { pt: "Visual", en: "Visual" } },
+        { label: { pt: "Miniatura do jogo ajustada", en: "Thumbnail size" }, value: { pt: "Capa", en: "200px" } },
+        { label: { pt: "Verificação Steam", en: "Steam polling" }, value: { pt: "5s", en: "5s" } },
+        { label: { pt: "Versão", en: "Version" }, value: { pt: "0.1.1", en: "0.1.1" } },
+      ],
+      links: [
+        { label: { pt: "Código", en: "Code" }, href: "https://github.com/Marcospena12/steam-screenshot-importer" },
+        { label: { pt: "Download", en: "Download" }, href: "https://github.com/Marcospena12/steam-screenshot-importer/releases/latest" },
+      ],
+      screenshots: [{
+      src: "/projects/steamshotbridge/tela-jogos.png",
+      alt: {
+        pt: "Visão da tela principal",
+        en: "Overview of the home screen",
+      },
+    },],
+    },
+  },
+
+  {
     id: "super-agente",
     title: { pt: "Super-Agente de IA para Suporte", en: "AI Super Agent for Support" },
     shortTitle: { pt: "Super-Agente de IA", en: "AI Super Agent" },
@@ -795,20 +902,27 @@ export const projects: Project[] = [
         { label: { pt: "Estados de validação", en: "Validation states" }, value: { pt: "4", en: "4" } },
         { label: { pt: "Versão", en: "Version" }, value: { pt: "0.2.0", en: "0.2.0" } },
       ],
-      info: [
-        { label: { pt: "Ano", en: "Year" }, value: { pt: "2026", en: "2026" } },
-        { label: { pt: "Versão", en: "Version" }, value: { pt: "0.2.0", en: "0.2.0" } },
-        { label: { pt: "Categoria", en: "Category" }, value: { pt: "Aplicação desktop", en: "Desktop application" } },
-        { label: { pt: "Papel", en: "Role" }, value: { pt: "Desenvolvedor solo", en: "Solo developer" } },
-        { label: { pt: "Status", en: "Status" }, value: { pt: "Publicado / em evolução", en: "Published / evolving" } },
-        { label: { pt: "Licença", en: "License" }, value: { pt: "MIT", en: "MIT" } },
-      ],
       links: [
         { label: { pt: "Código", en: "Code" }, href: "https://github.com/Marcospena12/free-games-alert" },
         { label: { pt: "Download", en: "Download" }, href: "https://github.com/Marcospena12/free-games-alert/releases/latest" },
         { label: { pt: "Dados via GamerPower", en: "Data via GamerPower" }, href: "https://www.gamerpower.com" },
       ],
-      screenshots: [],
+      screenshots: [{
+      src: "/projects/free-games-hub/tela-principal.png",
+      alt: {
+        pt: "Visão da tela principal",
+        en: "Overview of the home screen",
+      },
+    },
+    {
+      src: "/projects/free-games-hub/tela-historicos.png",
+      alt: {
+        pt: "Visão da tela de históricos de jogos grátis",
+        en: "Free Games History Screen View",
+      },
+    },
+
+  ],
     },
   },
 

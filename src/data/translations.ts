@@ -43,6 +43,8 @@ export const translations = {
       previousScreenshot: "Imagem anterior",
       nextScreenshot: "Próxima imagem",
       goToScreenshot: "Ir para a imagem",
+      expandScreenshot: "Ampliar captura de tela",
+      closeModal: "Fechar visualização",
     },
     cursos: {
       statusCompleted: "Concluído",
@@ -150,6 +152,8 @@ export const translations = {
       previousScreenshot: "Previous image",
       nextScreenshot: "Next image",
       goToScreenshot: "Go to image",
+      expandScreenshot: "Expand screenshot",
+      closeModal: "Close viewer",
     },
     cursos: {
       statusCompleted: "Completed",
