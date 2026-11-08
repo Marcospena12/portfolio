@@ -4,8 +4,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { Header } from "@/components/Header";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
-import { BackgroundAurora } from "@/components/BackgroundAurora";
-import { BackgroundPhoto } from "@/components/BackgroundPhoto";
+import { BackgroundScene } from "@/components/background/BackgroundScene";
 import { ChatWidget } from "@/components/ChatWidget";
 import { Hints } from "@/components/Hints/Hints";
 import { VisitNotifier } from "@/components/VisitNotifier";
@@ -79,8 +78,7 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
              <div className="relative flex min-h-dvh flex-col">
-              <BackgroundPhoto />
-              <BackgroundAurora />
+              <BackgroundScene />
               <Header />
               <div className="relative z-10 flex flex-1 flex-col">{children}</div>
             </div>

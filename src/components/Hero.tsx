@@ -16,10 +16,10 @@ export default function Hero({ featured }: HeroProps) {
     <section className="relative flex flex-1 items-center px-6 py-12 sm:py-16">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-90"
+        className="pointer-events-none absolute inset-0 opacity-70"
         style={{
           background:
-            "radial-gradient(ellipse 70% 70% at 50% 50%, var(--background) 0%, transparent 76%)",
+            "radial-gradient(ellipse 64% 58% at 50% 46%, var(--background) 0%, transparent 72%)",
         }}
       />
       <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center text-center">
