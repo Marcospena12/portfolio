@@ -1,18 +1,15 @@
 "use client";
 
 import { contactLinks } from "@/data/contact";
-import * as FaIcons from "react-icons/fa";
-import * as SiIcons from "react-icons/si";
-import type { IconType } from "react-icons";
-
-const allIcons = { ...FaIcons, ...SiIcons };
+import { techIcons } from "@/components/tech-icons";
 
 /** Lista de contatos (links externos). */
 export function ContatoLinks() {
   return (
     <div className="mx-auto flex max-w-md flex-col gap-3">
       {contactLinks.map((link) => {
-        const Icon = allIcons[link.icon as keyof typeof allIcons] as IconType;
+        const Icon = techIcons[link.icon];
+        if (!Icon) return null;
         return (
           <a
             key={link.id}

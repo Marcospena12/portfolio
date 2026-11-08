@@ -1,20 +1,15 @@
 "use client";
 
-"use client";
-
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { technologies } from "@/data/technologies";
-import * as SiIcons from "react-icons/si";
-import * as FaIcons from "react-icons/fa";
-import type { IconType } from "react-icons";
 import { useLanguage } from "@/components/LanguageProvider";
+import { techIcons } from "@/components/tech-icons";
 import { ScrambleText } from "@/components/ScrambleText";
 
-const allIcons = { ...SiIcons, ...FaIcons };
-
 function TechItem({ tech }: { tech: (typeof technologies)[number] }) {
-  const Icon = allIcons[tech.icon as keyof typeof allIcons] as IconType;
+  const Icon = techIcons[tech.icon];
+  if (!Icon) return null;
   return (
     <div className="flex items-center gap-2 whitespace-nowrap text-base font-medium text-foreground/70">
       <Icon style={{ color: tech.color }} className="text-3xl" />
@@ -42,9 +37,7 @@ export function TechMarquee() {
       const finalRepeats = Math.max(needed, 2);
       const trackHalfWidth = setWidth * finalRepeats;
 
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setRepeats(finalRepeats);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDuration(trackHalfWidth / PIXELS_PER_SECOND);
     }
 

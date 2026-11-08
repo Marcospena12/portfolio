@@ -15,7 +15,7 @@ function isActivePath(pathname: string, href: string): boolean {
 
 export function Header() {
   const pathname = usePathname();
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
 
   const headerRef = useRef<HTMLElement>(null);
   const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null);
@@ -49,7 +49,7 @@ export function Header() {
     document.fonts?.ready.then(measure);
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, [pathname]);
+  }, [pathname, locale]);
 
   return (
     <header

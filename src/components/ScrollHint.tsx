@@ -9,16 +9,27 @@ export function ScrollHint() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    function handleScroll() {
+    let frame = 0;
+
+    function update() {
+      frame = 0;
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setProgress(Math.min(percent, 100));
     }
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    function handleScroll() {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   const offset = CIRCUMFERENCE - (progress / 100) * CIRCUMFERENCE;

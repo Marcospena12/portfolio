@@ -1,15 +1,11 @@
-import * as SiIcons from "react-icons/si";
-import * as FaIcons from "react-icons/fa";
 import Link from "next/link";
 import type { Technology } from "@/data/technologies";
-import type { IconType } from "react-icons";
 import type { CSSProperties } from "react";
-
-const allIcons = { ...SiIcons, ...FaIcons };
+import { techIcons } from "@/components/tech-icons";
 
 export function TechCard({ tech }: { tech: Technology }) {
-  const Icon = allIcons[tech.icon as keyof typeof allIcons] as IconType;
-  console.log(tech.icon, Icon); // ainda deixamos o debug, remove depois de confirmar
+  const Icon = techIcons[tech.icon];
+  if (!Icon) return null;
 
   return (
     

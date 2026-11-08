@@ -2,13 +2,9 @@
 
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import type { IconType } from "react-icons";
-import * as FaIcons from "react-icons/fa";
-import * as SiIcons from "react-icons/si";
 import { useLanguage } from "@/components/LanguageProvider";
+import { techIcons } from "@/components/tech-icons";
 import type { FeaturedProjectSummary } from "@/data/featured";
-
-const allIcons = { ...SiIcons, ...FaIcons };
 
 export function FeaturedProjects({ items }: { items: FeaturedProjectSummary[] }) {
   const { locale, t } = useLanguage();
@@ -73,9 +69,7 @@ export function FeaturedProjects({ items }: { items: FeaturedProjectSummary[] })
                   className="hidden shrink-0 items-center gap-1.5 sm:flex"
                 >
                   {item.techs.map((tech) => {
-                    const Icon = allIcons[
-                      tech.icon as keyof typeof allIcons
-                    ] as IconType | undefined;
+                    const Icon = techIcons[tech.icon];
                     if (!Icon) return null;
                     return (
                       <Icon

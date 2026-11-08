@@ -87,8 +87,6 @@ export function GitlabSlackFlow({ devs = 3 }: Props) {
           </div>
         </div>
       </div>
-
-      <p className="text-xs text-foreground/40"></p>
     </div>
   );
 }

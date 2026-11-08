@@ -1,27 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import type { CSSProperties, KeyboardEvent } from "react";
+import Link from "next/link";
+import type { CSSProperties } from "react";
 import type { Course } from "@/data/courses";
 import { useLanguage } from "@/components/LanguageProvider";
 import { EmblemSpin } from "@/components/EmblemSpin";
 
 export function CourseCard({ course }: { course: Course }) {
-  const router = useRouter();
   const { locale, t } = useLanguage();
 
   const glowColor = course.color ?? "#888888";
-
-  const handleNavigate = () => {
-    router.push(`/cursos/${course.id}`);
-  };
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      handleNavigate();
-    }
-  };
+  const title = course.title[locale];
 
   const isCompleted = course.status === "concluido";
   const statusLabel = isCompleted
@@ -29,15 +18,17 @@ export function CourseCard({ course }: { course: Course }) {
     : t.cursos.statusInProgress;
 
   return (
-    <div
-      role="link"
-      tabIndex={0}
-      onClick={handleNavigate}
-      onKeyDown={handleKeyDown}
+    <article
       style={{ "--glow": glowColor } as CSSProperties}
-      className="relative flex cursor-pointer flex-col rounded-xl border border-foreground/10 bg-foreground/[0.02] p-6 backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1.5 hover:border-[var(--glow)] hover:shadow-[0_16px_32px_-12px_var(--glow)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+      className="relative flex flex-col rounded-xl border border-foreground/10 bg-foreground/[0.02] p-6 backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1.5 hover:border-[var(--glow)] hover:shadow-[0_16px_32px_-12px_var(--glow)]"
     >
-      <div className="pointer-events-none absolute top-4 right-4 z-10">
+      <Link
+        href={`/cursos/${course.id}`}
+        aria-label={title}
+        className="absolute inset-0 z-10 rounded-xl focus-visible:ring-2 focus-visible:ring-[var(--glow)] focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
+      />
+
+      <div className="pointer-events-none absolute top-4 right-4 z-20">
         <EmblemSpin
           src={course.emblem.src}
           srcDark={course.emblem.srcDark}
@@ -52,14 +43,14 @@ export function CourseCard({ course }: { course: Course }) {
       </span>
 
       <h2 className="mt-1 mb-2 pr-20 text-xl font-semibold leading-snug">
-        {course.title[locale]}
+        {title}
       </h2>
 
       <p className="mb-6 line-clamp-3 text-sm text-foreground/70">
         {course.summary[locale]}
       </p>
 
-      <div className="mt-auto flex flex-wrap items-center gap-2 pt-2 border-t border-foreground/5 text-xs">
+      <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-foreground/5 pt-2 text-xs">
         <span
           className={`rounded-full px-2.5 py-0.5 font-medium ${
             isCompleted
@@ -95,6 +86,6 @@ export function CourseCard({ course }: { course: Course }) {
           </span>
         )}
       </div>
-    </div>
+    </article>
   );
 }

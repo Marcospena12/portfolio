@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfólio — Marcos
 
-## Getting Started
+Site pessoal com projetos, cursos, tecnologias e um chat com agente de IA.
+Construído com Next.js 16 (App Router), React 19, Tailwind CSS v4 e AI SDK.
 
-First, run the development server:
+## Requisitos
+
+- Node.js 20+
+- npm
+
+## Desenvolvimento
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev        # servidor de desenvolvimento
+npm run build      # build de produção
+npm run start      # serve o build
+npm run lint       # ESLint
+npm run typecheck  # TypeScript sem emitir arquivos
+npm run smoke      # testes de fumaça do /api/chat (precisa do servidor rodando)
+```
 
-## Learn More
+O `smoke` usa `SMOKE_BASE_URL` (padrão `http://localhost:3000`).
 
-To learn more about Next.js, take a look at the following resources:
+## Variáveis de ambiente
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Copie `.env.example` para `.env.local` e preencha apenas o que for usar:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variável | Função |
+| --- | --- |
+| `GROQ_API_KEY` | Provider primário do chat |
+| `OPENROUTER_API_KEY` | Fallback do chat |
+| `GEMINI_API_KEY` | Último fallback do chat |
+| `NTFY_TOPIC` | Tópico do ntfy para alertas de visita |
+| `NTFY_SERVER` | Servidor ntfy (padrão `https://ntfy.sh`) |
+| `NTFY_TOKEN` | Token opcional do ntfy |
+| `OWNER_TOKEN` | Segredo do link `/api/owner?token=...` |
+| `OWNER_IPS` | IPs do dono separados por vírgula |
 
-## Deploy on Vercel
+Todas são server-only. Nunca comite o `.env.local`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Estrutura
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app` — rotas, metadata, sitemap, robots e API routes
+- `src/components` — UI, widget de chat e cenas de background
+- `src/data` — conteúdo do portfólio (projetos, cursos, tecnologias, textos)
+- `src/lib/agent` — agente, providers e tools do chat
+- `evals` — casos de teste do chat
+- `public` — imagens e certificados
+
+## Segurança
+
+- Headers de segurança e CSP definidos em `next.config.ts`.
+- `/api/chat` tem rate limit, limites de payload e deadline global.
+- `/api/visit` ignora dono, bots, chamadas cross-site e aplica rate limit.
+- Links externos usam `rel="noopener noreferrer"`.
+
+## Deploy
+
+Deploy padrão na Vercel. Configure as variáveis de ambiente no projeto e
+publique a branch principal.

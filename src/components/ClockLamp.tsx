@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { FaLightbulb } from "react-icons/fa";
 import { useLanguage } from "@/components/LanguageProvider";
 import type { Locale, Localized } from "@/data/translations";
@@ -22,10 +22,13 @@ function toMinutes(t: string) {
 }
 
 export function ClockLamp({ schedule }: { schedule: { on: string; off: string } }) {
-  const [minutes, setMinutes] = useState(0);
   const { locale } = useLanguage();
   const onMin = toMinutes(schedule.on);
   const offMin = toMinutes(schedule.off);
+  const [isOn, setIsOn] = useState(() => 0 >= onMin && 0 < offMin);
+  const isOnRef = useRef(isOn);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const timeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -33,25 +36,41 @@ export function ClockLamp({ schedule }: { schedule: { on: string; off: string } 
 
     const loop = (now: number) => {
       const progress = ((now - start) % CYCLE_MS) / CYCLE_MS;
-      setMinutes((progress * (24 * 60)) % (24 * 60));
+      const minutes = (progress * (24 * 60)) % (24 * 60);
+      const hours = minutes / 60;
+
+      const root = rootRef.current;
+      if (root) {
+        root.style.setProperty("--hour-deg", `${((hours % 12) / 12) * 360}deg`);
+        root.style.setProperty("--minute-deg", `${((minutes % 60) / 60) * 360}deg`);
+        root.style.setProperty("--second-deg", `${((minutes % 60) / 60) * 360}deg`);
+      }
+
+      if (timeRef.current) {
+        const hh = String(Math.floor(hours) % 24).padStart(2, "0");
+        const mm = String(Math.floor(minutes % 60)).padStart(2, "0");
+        timeRef.current.textContent = `${hh}:${mm}`;
+      }
+
+      const nextIsOn = minutes >= onMin && minutes < offMin;
+      if (nextIsOn !== isOnRef.current) {
+        isOnRef.current = nextIsOn;
+        setIsOn(nextIsOn);
+      }
+
       raf = requestAnimationFrame(loop);
     };
 
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, []);
-
-  const hours = minutes / 60;
-  const hourDeg = ((hours % 12) / 12) * 360;
-  const minuteDeg = ((minutes % 60) / 60) * 360;
-  const secondDeg = ((minutes % 60) / 60) * 360;
-  const isOn = minutes >= onMin && minutes < offMin;
-
-  const hh = String(Math.floor(hours) % 24).padStart(2, "0");
-  const mm = String(Math.floor(minutes % 60)).padStart(2, "0");
+  }, [onMin, offMin]);
 
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center gap-8 rounded-2xl border border-foreground/10 bg-background/40 p-8 backdrop-blur-sm sm:flex-row sm:justify-center">
+    <div
+      ref={rootRef}
+      style={{ "--hour-deg": "0deg", "--minute-deg": "0deg", "--second-deg": "0deg" } as CSSProperties}
+      className="mx-auto flex max-w-xl flex-col items-center gap-8 rounded-2xl border border-foreground/10 bg-background/40 p-8 backdrop-blur-sm sm:flex-row sm:justify-center"
+    >
       <div className="led-border relative h-64 w-64 rounded-full border border-foreground/10 bg-background/60 backdrop-blur-sm">
         <div
           className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-700"
@@ -80,21 +99,21 @@ export function ClockLamp({ schedule }: { schedule: { on: string; off: string } 
 
          <div
           className="absolute bottom-1/2 left-1/2 h-20 w-1.5 -ml-[3px] rounded-full bg-foreground/90 shadow-[0_0_8px_rgba(0,0,0,0.35)]"
-          style={{ transform: `rotate(${hourDeg}deg)`, transformOrigin: "50% 100%" }}
+          style={{ transform: "rotate(var(--hour-deg))", transformOrigin: "50% 100%" }}
         />
         <div
           className="absolute top-1/2 left-1/2 h-10 w-1 -ml-[2px] rounded-full bg-foreground/30"
-          style={{ transform: `rotate(${hourDeg}deg)`, transformOrigin: "50% 0%" }}
+          style={{ transform: "rotate(var(--hour-deg))", transformOrigin: "50% 0%" }}
         />
 
         {/* Ponteiro de minutos */}
         <div
           className="absolute bottom-1/2 left-1/2 h-24 w-[3px] -ml-[1.5px] rounded-full bg-foreground/55"
-          style={{ transform: `rotate(${minuteDeg}deg)`, transformOrigin: "50% 100%" }}
+          style={{ transform: "rotate(var(--minute-deg))", transformOrigin: "50% 100%" }}
         />
         <div
           className="absolute top-1/2 left-1/2 h-8 w-[2px] -ml-[1px] rounded-full bg-foreground/25"
-          style={{ transform: `rotate(${minuteDeg}deg)`, transformOrigin: "50% 0%" }}
+          style={{ transform: "rotate(var(--minute-deg))", transformOrigin: "50% 0%" }}
         />
 
         {/* Ponteiro de segundos */}
@@ -102,7 +121,7 @@ export function ClockLamp({ schedule }: { schedule: { on: string; off: string } 
           className={`absolute bottom-1/2 left-1/2 h-24 w-[2px] -ml-[1px] rounded-full transition-colors duration-300 ${
             isOn ? "bg-amber-400/70" : "bg-foreground/25"
           }`}
-          style={{ transform: `rotate(${secondDeg}deg)`, transformOrigin: "50% 100%" }}
+          style={{ transform: "rotate(var(--second-deg))", transformOrigin: "50% 100%" }}
         />
 
         <div className="absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground ring-2 ring-background" />
@@ -122,8 +141,8 @@ export function ClockLamp({ schedule }: { schedule: { on: string; off: string } 
           />
         </div>
 
-        <div className="text-2xl font-semibold tabular-nums">
-          {hh}:{mm}
+        <div ref={timeRef} className="text-2xl font-semibold tabular-nums">
+          00:00
         </div>
 
         <span
