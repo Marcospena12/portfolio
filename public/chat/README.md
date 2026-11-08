@@ -2,7 +2,7 @@
 
 Coloque aqui a imagem que aparece no header do ChatWidget, com o nome:
 
-    avatar.png
+    avatar.webp
 
 O caminho é referenciado em:
 `src/components/ChatWidget/config.ts` → `CHAT_AVATAR_SRC`

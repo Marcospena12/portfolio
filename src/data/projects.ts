@@ -143,7 +143,7 @@ export const projects: Project[] = [
         { label: { pt: "Download", en: "Download" }, href: "https://github.com/Marcospena12/steam-screenshot-importer/releases/latest" },
       ],
       screenshots: [{
-      src: "/projects/steamshotbridge/tela-jogos.png",
+      src: "/projects/steamshotbridge/tela-jogos.webp",
       alt: {
         pt: "Visão da tela principal",
         en: "Overview of the home screen",
@@ -474,8 +474,8 @@ export const projects: Project[] = [
       visual: {
         kind: "glow-logos",
         logos: [
-          { src: "/logos/asterisk-logo.png", alt: { pt: "Logo do Asterisk", en: "Asterisk logo" } },
-          { src: "/logos/freepbx-logo.png", alt: { pt: "Logo do FreePBX", en: "FreePBX logo" } },
+          { src: "/logos/asterisk-logo.webp", alt: { pt: "Logo do Asterisk", en: "Asterisk logo" } },
+          { src: "/logos/freepbx-logo.webp", alt: { pt: "Logo do FreePBX", en: "FreePBX logo" } },
         ],
       },
     },
@@ -908,14 +908,14 @@ export const projects: Project[] = [
         { label: { pt: "Dados via GamerPower", en: "Data via GamerPower" }, href: "https://www.gamerpower.com" },
       ],
       screenshots: [{
-      src: "/projects/free-games-hub/tela-principal.png",
+      src: "/projects/free-games-hub/tela-principal.webp",
       alt: {
         pt: "Visão da tela principal",
         en: "Overview of the home screen",
       },
     },
     {
-      src: "/projects/free-games-hub/tela-historicos.png",
+      src: "/projects/free-games-hub/tela-historicos.webp",
       alt: {
         pt: "Visão da tela de históricos de jogos grátis",
         en: "Free Games History Screen View",

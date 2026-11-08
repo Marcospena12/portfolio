@@ -11,7 +11,7 @@ type ChatAvatarProps = {
 
 /**
  * Avatar do chat (header e indicador "pensando...").
- * Usa a imagem de `public/chat/avatar.png` (definida em ./config.ts);
+ * Usa a imagem de `public/chat/avatar.webp` (definida em ./config.ts);
  * se ela ainda não existir, mostra as iniciais como fallback.
  */
 export function ChatAvatar({ size = 40 }: ChatAvatarProps) {
