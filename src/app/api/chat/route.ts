@@ -1,55 +1,89 @@
 import { createAgent } from "@/lib/agent/agent";
 import { getModelCandidates, getModelLabel, isTransient } from "@/lib/agent/providers";
+import { SITE_URL } from "@/data/site";
+import { createRateLimiter } from "@/lib/rate-limit";
 import type { NextRequest } from "next/server";
+
+export const maxDuration = 60;
 
 const MAX_MESSAGES = 40;
 const MAX_MESSAGE_LENGTH = 2000;
+const MAX_TOTAL_CHARS = 12_000;
+const MAX_BODY_BYTES = 128_000;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 20;
 
-// Timeout de cada chamada de IA. DevOps: o cliente do front aborta em 60s e
-// a Vercel Hobby aguenta 300s, então dá pra tentar vários providers seguidos.
+// Timeout de cada chamada de IA. O cliente do front aborta em 60s, então o
+// deadline global mantém a resposta dentro dessa janela mesmo com fallback.
 const REQUEST_TIMEOUT_MS = 25_000;
+const TOTAL_DEADLINE_MS = 55_000;
+
 type IncomingMessage =
   | { role: "user"; content: string }
   | { role: "assistant"; content: string };
 
-// Rate limit simples em memória (por instância do servidor).
-const hits = new Map<string, { count: number; resetAt: number }>();
+const rateLimit = createRateLimiter({
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: RATE_LIMIT_MAX,
+});
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || entry.resetAt <= now) {
-    hits.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+function getClientIp(request: NextRequest): string {
+  return (
+    request.headers.get("x-real-ip")?.trim() ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "local"
+  );
+}
+
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return true;
+  try {
+    return new URL(origin).origin === new URL(SITE_URL).origin;
+  } catch {
     return false;
   }
-  entry.count += 1;
-  return entry.count > RATE_LIMIT_MAX;
 }
 
 function sanitizeMessages(raw: unknown): IncomingMessage[] | null {
   if (!Array.isArray(raw) || raw.length === 0) return null;
+
   const messages: IncomingMessage[] = [];
-  for (const item of raw) {
+  let totalChars = 0;
+  for (const item of raw.slice(-MAX_MESSAGES)) {
     if (typeof item !== "object" || item === null) return null;
     const { role, content } = item as { role?: unknown; content?: unknown };
     if ((role !== "user" && role !== "assistant") || typeof content !== "string") {
       return null;
     }
     if (content.trim().length === 0 || content.length > MAX_MESSAGE_LENGTH) return null;
+    totalChars += content.length;
+    if (totalChars > MAX_TOTAL_CHARS) return null;
     messages.push({ role, content });
   }
-  return messages.slice(-MAX_MESSAGES);
+  return messages;
 }
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
-  if (isRateLimited(ip)) {
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return Response.json({ error: "Requisição muito grande." }, { status: 413 });
+  }
+
+  const ip = getClientIp(request);
+  const limit = rateLimit(ip);
+  if (limit.limited) {
     return Response.json(
       { error: "Muitas mensagens. Tente novamente em instantes." },
-      { status: 429 },
+      {
+        status: 429,
+        headers: { "Retry-After": String(limit.retryAfterSeconds) },
+      },
     );
+  }
+
+  const origin = request.headers.get("origin");
+  if (!isAllowedOrigin(origin)) {
+    return Response.json({ error: "Origem não permitida." }, { status: 403 });
   }
 
   let body: unknown;
@@ -64,7 +98,6 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Requisição inválida." }, { status: 400 });
   }
 
-  const origin = request.headers.get("origin");
   const candidates = getModelCandidates(origin);
   if (candidates.length === 0) {
     return Response.json(
@@ -74,13 +107,20 @@ export async function POST(request: NextRequest) {
   }
 
   let anyTransient = false;
+  const deadline = Date.now() + TOTAL_DEADLINE_MS;
   for (const [index, candidate] of candidates.entries()) {
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) {
+      anyTransient = true;
+      break;
+    }
+
     const startedAt = Date.now();
     try {
       const agent = createAgent(candidate.model);
       const result = await agent.generate({
         messages,
-        timeout: REQUEST_TIMEOUT_MS,
+        timeout: Math.min(REQUEST_TIMEOUT_MS, remaining),
       });
 
       const durationMs = Date.now() - startedAt;

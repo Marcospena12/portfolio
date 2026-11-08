@@ -2,6 +2,7 @@ import { createGoogle } from "@ai-sdk/google";
 import { createGroq } from "@ai-sdk/groq";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { APICallError, type LanguageModel } from "ai";
+import { SITE_URL } from "@/data/site";
 
 export type ModelCandidate = {
   provider: string;
@@ -43,8 +44,20 @@ export function getModelLabel(modelId: string): string {
     .join(" ");
 }
 
+/** HTTP-Referer só é enviado quando a origem é a do próprio site. */
+function safeReferer(origin: string | null): string | undefined {
+  if (!origin) return undefined;
+  try {
+    const parsed = new URL(origin);
+    return parsed.origin === new URL(SITE_URL).origin ? parsed.origin : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function getModelCandidates(origin: string | null): ModelCandidate[] {
   const candidates: ModelCandidate[] = [];
+  const referer = safeReferer(origin);
 
   const groqKey = process.env.GROQ_API_KEY;
   if (groqKey) {
@@ -62,7 +75,7 @@ export function getModelCandidates(origin: string | null): ModelCandidate[] {
       baseURL: "https://openrouter.ai/api/v1",
       apiKey: openRouterKey,
       headers: {
-        ...(origin ? { "HTTP-Referer": origin } : {}),
+        ...(referer ? { "HTTP-Referer": referer } : {}),
         "X-Title": "Portfolio do Marcos",
       },
     });

@@ -1,10 +1,45 @@
+import { SITE_URL } from "@/data/site";
+import { createRateLimiter } from "@/lib/rate-limit";
 import type { NextRequest } from "next/server";
 
 const BOT_RE = /bot|crawler|spider|crawling|headless|lighthouse|vercel|preview|monitor|uptime/i;
 const MOBILE_RE = /mobile|android|iphone/i;
 const MAX_PATH_LENGTH = 200;
 const MAX_LANGUAGE_LENGTH = 20;
+const MAX_BODY_BYTES = 8_192;
 const NTFY_TIMEOUT_MS = 4000;
+const RATE_LIMIT_WINDOW_MS = 3_600_000;
+const RATE_LIMIT_MAX = 20;
+
+const rateLimit = createRateLimiter({
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: RATE_LIMIT_MAX,
+});
+
+function getClientIp(request: NextRequest): string {
+  return (
+    request.headers.get("x-real-ip")?.trim() ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "local"
+  );
+}
+
+// Só aceita chamadas feitas pela própria página (ou sem os headers, para
+// clientes não-browser); chamadas cross-site não disparam notificação.
+function isSameOriginRequest(request: NextRequest): boolean {
+  const secFetchSite = request.headers.get("sec-fetch-site")?.toLowerCase();
+  if (secFetchSite && secFetchSite !== "same-origin" && secFetchSite !== "none") {
+    return false;
+  }
+
+  const origin = request.headers.get("origin");
+  if (!origin) return true;
+  try {
+    return new URL(origin).origin === new URL(SITE_URL).origin;
+  } catch {
+    return false;
+  }
+}
 
 type VisitPayload = {
   path: string;
@@ -58,8 +93,8 @@ function parseBody(raw: unknown): VisitPayload {
 function isOwnerIp(request: NextRequest): boolean {
   const list = process.env.OWNER_IPS;
   if (!list) return false;
-  const first = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  if (!first) return false;
+  const first = getClientIp(request);
+  if (!first || first === "local") return false;
   return list
     .split(",")
     .map((item) => item.trim())
@@ -68,6 +103,11 @@ function isOwnerIp(request: NextRequest): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return Response.json({ error: "Requisição muito grande." }, { status: 413 });
+  }
+
   // Fora de produção só imprime o payload no terminal, sem chamar a rede.
   if (process.env.NODE_ENV !== "production") {
     const payload = parseBody(await request.json().catch(() => null));
@@ -80,6 +120,9 @@ export async function POST(request: NextRequest) {
 
   const userAgent = request.headers.get("user-agent") ?? "";
   if (BOT_RE.test(userAgent)) return noContent();
+
+  if (!isSameOriginRequest(request)) return noContent();
+  if (rateLimit(getClientIp(request)).limited) return noContent();
 
   const topic = process.env.NTFY_TOPIC;
   if (!topic) return noContent();
