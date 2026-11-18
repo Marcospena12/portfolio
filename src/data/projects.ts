@@ -32,6 +32,71 @@ export type ProjectDetails = {
   visual?: ProjectVisual;
 };
 
+export type ProjectTagId =
+  | "infra"
+  | "software"
+  | "automation"
+  | "cloud"
+  | "ai"
+  | "redes";
+
+export type ProjectTag = {
+  id: ProjectTagId;
+  label: Localized;
+  description: Localized;
+};
+
+export const projectTags: ProjectTag[] = [
+  {
+    id: "infra",
+    label: { pt: "Infraestrutura", en: "Infrastructure" },
+    description: {
+      pt: "Servidores, virtualização, storage, backup e equipamentos de campo.",
+      en: "Servers, virtualization, storage, backup and on-premises gear.",
+    },
+  },
+  {
+    id: "software",
+    label: { pt: "Desenvolvimento de Software", en: "Software Development" },
+    description: {
+      pt: "Aplicações, nós de integração e ferramentas construídas do zero.",
+      en: "Applications, integration nodes and tools built from scratch.",
+    },
+  },
+  {
+    id: "automation",
+    label: { pt: "Automação", en: "Automation" },
+    description: {
+      pt: "Fluxos e orquestrações que removem trabalho manual recorrente.",
+      en: "Workflows and orchestrations that remove recurring manual work.",
+    },
+  },
+  {
+    id: "cloud",
+    label: { pt: "Cloud", en: "Cloud" },
+    description: {
+      pt: "Integrações com provedores, túneis, object storage e APIs em nuvem.",
+      en: "Integrations with providers, tunnels, object storage and cloud APIs.",
+    },
+  },
+  {
+    id: "ai",
+    label: { pt: "Agentes de IA", en: "AI Agents" },
+    description: {
+      pt: "Agentes, RAG e pipelines de IA que conversam com dados reais.",
+      en: "Agents, RAG and AI pipelines that talk to real data.",
+    },
+  },
+  {
+    id: "redes",
+    label: { pt: "Redes", en: "Networking" },
+    description: {
+      pt: "Switches, VLANs, SIP, cabeamento e diagnósticos de rede.",
+      en: "Switches, VLANs, SIP, cabling and network diagnostics.",
+    },
+  },
+];
+
 export type Project = {
   id: string;
   title: Localized;
@@ -39,6 +104,7 @@ export type Project = {
   subtitle?: Localized;
   description: Localized;
   techIds: string[];
+  tags: ProjectTagId[];
   type: "trabalho" | "pessoal";
   link?: string;
   details?: ProjectDetails;
@@ -58,6 +124,7 @@ export const projects: Project[] = [
       en: "A Python and PySide6 desktop application to import and sync external screenshots into Steam's library, featuring atomic VDF file writes and a non-destructive persistent queue.",
     },
     techIds: ["python", "qt", "pytest", "githubactions", "git"],
+    tags: ["software"],
     type: "pessoal",
     link: "https://github.com/Marcospena12/steam-screenshot-importer",
     details: {
@@ -161,6 +228,7 @@ export const projects: Project[] = [
       en: "Hierarchical multi-agent system built on n8n to automate support via Crisp, routing each conversation to the right specialist. Resolves 70% of the ~700 monthly conversations fully autonomously, in a human way.",
     },
     techIds: ["n8n", "javascript", "postgresql", "redis", "slack", "metabase", "python"],
+    tags: ["ai", "automation"],
     type: "trabalho",
     details: {
       architecture: {
@@ -290,6 +358,7 @@ export const projects: Project[] = [
       en: "Officially verified n8n node that turns the Notificações Inteligentes API into native visual blocks: letting you create, edit, search and manage leads and integrations without writing code.",
     },
     techIds: ["n8n", "typescript", "git"],
+    tags: ["software"],
     type: "trabalho",
     link: "https://github.com/GPMP/n8n-node-notificacoes-inteligentes/blob/main/README.md",
     details: {
@@ -379,6 +448,7 @@ export const projects: Project[] = [
       en: "IP telephony infrastructure built from scratch for the GPM coworking space (two floors, 8 rooms plus reception, 10+ IP extensions), integrating the Intelbras intercom into FreePBX, with call automation, access control, call recording backup and full network, SIP and firewall diagnostics.",
     },
     techIds: ["linux", "debian", "proxmox", "ubiquite"],
+    tags: ["infra", "redes"],
     type: "trabalho",
     details: {
       architecture: {
@@ -491,6 +561,7 @@ export const projects: Project[] = [
       en: "Building automation ecosystem that brings 30 CLIMATIZATION, LIGHTING and ACCESS devices into a single platform, replacing closed vendor apps with central control, automatic shutoff and real energy savings.",
     },
     techIds: ["homeassistant", "proxmox", "mqtt"],
+    tags: ["infra", "automation", "redes"],
     type: "trabalho",
     details: {
       architecture: {
@@ -598,6 +669,7 @@ export const projects: Project[] = [
       en: "Shared printing for the coworking space using open source SAVAPAGE: everything through the browser, no installation, one account per room, monthly credits that renew on their own, and centralized quota management.",
     },
     techIds: ["proxmox", "debian", "cloudflare"],
+    tags: ["infra", "cloud"],
     type: "trabalho",
     details: {
       architecture: {
@@ -702,23 +774,27 @@ export const projects: Project[] = [
     id: "portfolio",
     title: { pt: "Este Portfólio", en: "This Portfolio" },
     description: {
-      pt: "O próprio site que você está vendo agora, construído do zero com Next.js e Tailwind.",
-      en: "The very site you are looking at right now, built from scratch with Next.js and Tailwind.",
+      pt: "O próprio site que você está vendo agora, construído do zero com Next.js, Tailwind e um agente de IA que conversa com os dados reais do portfólio.",
+      en: "The very site you are looking at right now, built from scratch with Next.js, Tailwind and an AI agent that talks to the portfolio's real data.",
     },
-    techIds: ["react", "nextjs", "tailwindcss", "typescript", "git"],
+    techIds: ["react", "nextjs", "tailwindcss", "typescript", "git", "node"],
+    tags: ["software", "ai"],
     type: "pessoal",
     details: {
       architecture: {
-        pt: "Este site é o próprio projeto. Foi desenhado com uma ideia central: a vitrine precisa ser fácil de manter e fácil de navegar. Todos os projetos, tecnologias e contatos vivem em arquivos de dados centralizados (src/data/) e as páginas são geradas a partir deles, adicionar um projeto é adicionar um objeto, e o card, os badges e a página nascem sozinhos. Cada projeto tem a mesma narrativa completa: arquitetura, stack, como funciona, diferenciais, métricas e um visual próprio dirigido por dados, do mapa de agentes ao relógio de automação, do medidor de créditos do SAVAPAGE aos logos com brilho das stacks. Tudo construído com Next.js (App Router), React 19, TypeScript e Tailwind CSS v4, em temas dark/light, bilíngue, com tipografia Space Grotesk e JetBrains Mono. Em resumo: a vitrine das minhas habilidades é, ao mesmo tempo, uma prova prática de como gosto de construir: dados claros, componentes pequenos e consistência em tudo.",
-        en: "This site is the project itself. It was designed around one central idea: the showcase has to be easy to maintain and easy to navigate. Every project, technology and contact lives in centralized data files (src/data/), and the pages are generated from them. Adding a project means adding an object, and the card, the badges and the page build themselves. Each project carries the same complete narrative: architecture, stack, how it works, differentiators, metrics and a custom data-driven visual, from the agent map to the automation clock, from the SAVAPAGE credit meter to the glowing stack logos. Everything built with Next.js (App Router), React 19, TypeScript and Tailwind CSS v4, in dark/light themes, bilingual, with Space Grotesk and JetBrains Mono typography. In short: the showcase of my skills is also a practical proof of how I like to build, with clear data, small components and consistency throughout.",
+        pt: "Este site é o próprio projeto. Foi desenhado com uma ideia central: a vitrine precisa ser fácil de manter e fácil de navegar. Todos os projetos, tecnologias e contatos vivem em arquivos de dados centralizados (src/data/) e as páginas são geradas a partir deles; adicionar um projeto é adicionar um objeto, e o card, os badges e a página nascem sozinhos. Cada projeto tem a mesma narrativa completa: arquitetura, stack, como funciona, diferenciais, métricas e um visual próprio dirigido por dados, do mapa de agentes ao relógio de automação, do medidor de créditos do SAVAPAGE aos logos com brilho das stacks. Sobre essa vitrine roda o Ciri, um agente de IA construído com o Vercel AI SDK (ToolLoopAgent) que consulta os mesmos arquivos de dados por cinco ferramentas — bio, projetos, tecnologias e contatos — e responde em PT/EN com fallback entre Groq, OpenRouter e Gemini. A camada de servidor inclui rotas de API para o chat, notificações de visita via ntfy e um endpoint owner-only gated por token e IP, além de segurança por padrão: CSP, headers de segurança, rate limit e deadline. Tudo construído com Next.js 16 (App Router), React 19, TypeScript e Tailwind CSS v4, em temas dark/light, bilíngue, com tipografia Space Grotesk e JetBrains Mono. Em resumo: a vitrine das minhas habilidades é, ao mesmo tempo, uma prova prática de como gosto de construir: dados claros, componentes pequenos, IA útil e consistência em tudo.",
+        en: "This site is the project itself. It was designed around one central idea: the showcase has to be easy to maintain and easy to navigate. Every project, technology and contact lives in centralized data files (src/data/), and the pages are generated from them. Adding a project means adding an object, and the card, the badges and the page build themselves. Each project carries the same complete narrative: architecture, stack, how it works, differentiators, metrics and a custom data-driven visual, from the agent map to the automation clock, from the SAVAPAGE credit meter to the glowing stack logos. On top of that showcase runs Ciri, an AI agent built with the Vercel AI SDK (ToolLoopAgent) that queries the same data files through five tools — bio, projects, technologies and contacts — and replies in PT/EN with a fallback across Groq, OpenRouter and Gemini. The server layer includes API routes for the chat, visit notifications via ntfy and an owner-only endpoint gated by token and IP, plus security by default: CSP, security headers, rate limiting and a deadline. Everything is built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS v4, in dark/light themes, bilingual, with Space Grotesk and JetBrains Mono typography. In short: the showcase of my skills is also a practical proof of how I like to build, with clear data, small components, useful AI and consistency throughout.",
       },
       stack: [
-        { pt: "Framework: Next.js (App Router) + React 19 + TypeScript", en: "Framework: Next.js (App Router) + React 19 + TypeScript" },
+        { pt: "Framework: Next.js 16 (App Router) + React 19 + TypeScript", en: "Framework: Next.js 16 (App Router) + React 19 + TypeScript" },
         { pt: "Estilo: Tailwind CSS v4 com design tokens próprios (vidro, LED, aurora)", en: "Styling: Tailwind CSS v4 with custom design tokens (glass, LED, aurora)" },
         { pt: "Dados: padrão centralizado, projetos, tecnologias e contatos em arquivos de dados", en: "Data: centralized pattern, with projects, technologies and contacts in data files" },
         { pt: "Visual: AgentMap, ClockLamp, QuotaMeter, TiltLogo, GlowLogo, ScrambleText, TechMarquee", en: "Visuals: AgentMap, ClockLamp, QuotaMeter, TiltLogo, GlowLogo, ScrambleText, TechMarquee" },
         { pt: "Idioma e tema: LanguageProvider (PT/EN) + ThemeProvider (dark/light)", en: "Language and theme: LanguageProvider (PT/EN) + ThemeProvider (dark/light)" },
         { pt: "Tipografia: Space Grotesk e JetBrains Mono via next/font", en: "Typography: Space Grotesk and JetBrains Mono via next/font" },
+        { pt: "Agente de IA: Vercel AI SDK (ToolLoopAgent) com 5 ferramentas e fallback Groq → OpenRouter → Gemini", en: "AI agent: Vercel AI SDK (ToolLoopAgent) with 5 tools and fallback Groq → OpenRouter → Gemini" },
+        { pt: "Segurança: CSP, headers de segurança, rate limit e deadline no /api/chat", en: "Security: CSP, security headers, rate limiting and a deadline on /api/chat" },
+        { pt: "Notificações: /api/visit com ntfy para avisos de visita, ignorando dono e bots", en: "Notifications: /api/visit with ntfy for visit alerts, ignoring owner and bots" },
       ],
       categoriesTitle: { pt: "Como este site funciona", en: "How this site works" },
       agentCategories: [
@@ -745,10 +821,11 @@ export const projects: Project[] = [
           ],
         },
         {
-          label: { pt: "Bilíngue e confortável em qualquer tema", en: "Bilingual and comfortable in any theme" },
+          label: { pt: "Agente de IA e segurança no próprio site", en: "AI agent and security on the site itself" },
           items: [
-            { pt: "PT/EN com troca de idioma em tempo real", en: "PT/EN with real-time language switching" },
-            { pt: "Dark e light, com tipografia Space Grotesk e JetBrains Mono", en: "Dark and light, with Space Grotesk and JetBrains Mono typography" },
+            { pt: "Ciri, agente de IA com 5 ferramentas que consulta os dados reais do portfólio", en: "Ciri, an AI agent with 5 tools that queries the portfolio's real data" },
+            { pt: "Fallback de provedores de LLM: Groq → OpenRouter → Gemini", en: "LLM provider fallback: Groq → OpenRouter → Gemini" },
+            { pt: "Segurança por padrão: CSP, headers, rate limit e endpoint owner-only", en: "Security by default: CSP, headers, rate limiting and an owner-only endpoint" },
           ],
         },
       ],
@@ -778,14 +855,18 @@ export const projects: Project[] = [
           en: "Obsessive consistency: every page follows the same pattern, from index to detail",
         },
         {
-          pt: "E continua crescendo: cada projeto novo entra seguindo a mesma receita",
-          en: "And it keeps growing: every new project enters following the same recipe",
+          pt: "Agente de IA com ferramentas: Ciri consulta projetos, bio, tecnologias e contatos em tempo real",
+          en: "Tool-calling AI agent: Ciri queries projects, bio, technologies and contacts in real time",
+        },
+        {
+          pt: "Segurança por padrão: CSP, rate limit, deadline e endpoint owner-only na camada de API",
+          en: "Security by default: CSP, rate limiting, a deadline and an owner-only endpoint on the API layer",
         },
       ],
       metrics: [
-        { label: { pt: "Projetos documentados", en: "Documented projects" }, value: { pt: "10+", en: "10+" } },
-        { label: { pt: "Tecnologias no acervo", en: "Technologies in the collection" }, value: { pt: "25+", en: "25+" } },
-        { label: { pt: "Componentes autorais", en: "Author components" }, value: { pt: "22+", en: "22+" } },
+        { label: { pt: "Projetos documentados", en: "Documented projects" }, value: { pt: "13+", en: "13+" } },
+        { label: { pt: "Tecnologias no acervo", en: "Technologies in the collection" }, value: { pt: "31+", en: "31+" } },
+        { label: { pt: "Componentes autorais", en: "Author components" }, value: { pt: "53+", en: "53+" } },
         { label: { pt: "Páginas", en: "Pages" }, value: { pt: "6", en: "6" } },
       ],
       visual: {
@@ -815,6 +896,7 @@ export const projects: Project[] = [
       en: "A desktop app built with Python/PySide6 that monitors free games in Steam RSS feeds and the GamerPower API. It validates offers, removes duplicates and notifies the user while keeping the entire history locally.",
     },
     techIds: ["python", "qt", "sqlite", "git", "pytest", "githubactions"],
+    tags: ["software"],
     type: "pessoal",
     link: "https://github.com/Marcospena12/free-games-alert",
     details: {
@@ -934,6 +1016,7 @@ export const projects: Project[] = [
       en: "Every issue opened on GitLab triggers an ecosystem of 25 automations that take care of the board, review and deploy, keeping the team informed on Slack with nobody having to chase anyone.",
     },
     techIds: ["n8n", "gitlab", "slack", "javascript", "python"],
+    tags: ["software", "automation"],
     type: "trabalho",
     details: {
       architecture: {
@@ -1023,6 +1106,7 @@ export const projects: Project[] = [
       en: "Ingestion pipeline that crawls the institutional site and the help center weekly, cleans and chunks the content with AI, and vectorizes it into two PGVector databases on Supabase: the knowledge base that feeds the RAG behind our specialist agents.",
     },
     techIds: ["n8n", "javascript", "cloudflare", "postgresql", "supabase"],
+    tags: ["ai", "automation", "cloud"],
     type: "trabalho",
     details: {
       architecture: {
@@ -1109,6 +1193,7 @@ export const projects: Project[] = [
       en: "Handoff system that closes the loop on Super Agente: every conversation the AI cannot resolve is routed to Finance, Sales or Development with a full template, an AI summary and a link to the conversation on Slack, and every conversation closed by a human comes back as a structured 4-axis analysis that guides the tuning of the agent's prompts.",
     },
     techIds: ["n8n", "javascript", "redis", "slack"],
+    tags: ["ai", "automation"],
     type: "trabalho",
     details: {
       architecture: {
@@ -1208,6 +1293,7 @@ export const projects: Project[] = [
       en: "A Synology RS820+ NAS with 4 HDDs in RAID 5 that centralizes storage for the GPM ecosystem (recordings from 20+ cameras for 45 days, local backups of every VM, Proxmox cluster quorum and automated retention), all configured from scratch starting from a machine that was sitting idle.",
     },
     techIds: ["synology", "proxmox", "linux"],
+    tags: ["infra", "redes"],
     type: "trabalho",
     details: {
       architecture: {
@@ -1306,6 +1392,7 @@ export const projects: Project[] = [
       en: "A multi-layer backup architecture on top of Proxmox Backup Server, with incremental deduplicated VM backups, a primary NAS datastore, off-site replication to S3 Object Storage, a full lifecycle with prune, garbage collection and integrity verification, plus an independent backup of the PBS itself, with monitoring published to Slack in real time.",
     },
     techIds: ["proxmox", "synology", "n8n", "javascript", "slack"],
+    tags: ["infra", "cloud"],
     type: "trabalho",
     details: {
       architecture: {
